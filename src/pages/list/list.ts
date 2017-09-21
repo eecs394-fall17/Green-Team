@@ -15,10 +15,10 @@ export class ListPage {
   constructor(public navCtrl: NavController, public navParams: NavParams) {
     this.selectedItem = navParams.get('item');
 
-    this.icons = ['flask', 'wifi', 'beer', 'football', 'basketball', 'paper-plane', 'american-football', 'boat', 'bluetooth', 'build'];
+    this.icons = ['flask', 'wifi', 'beer', 'football', 'basketball', 'paper-plane', 'american-football', 'boat', 'bluetooth', 'build', 'glasses'];
     this.items = [];
 
-    for (let i = 1; i < 11; i++) {
+    for (let i = 1; i < 13; i++) {
       this.items.push({
         title: 'Item: ' + i,
         text: 'This is #' + i,
