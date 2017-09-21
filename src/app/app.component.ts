@@ -1,3 +1,4 @@
+import { HomePage } from './../pages/home/home';
 import { Component, ViewChild  } from '@angular/core';
 import { Platform, MenuController, Nav } from 'ionic-angular';
 
@@ -11,7 +12,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
   templateUrl: 'app.html'
 })
 export class MyApp {
-  rootPage:any = ListPage;
+  rootPage:any = HomePage;
   pages: Array<{title: string, component: any}>;
   @ViewChild(Nav) nav: Nav;
 
