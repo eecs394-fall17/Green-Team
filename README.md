@@ -24,4 +24,7 @@ $ ionic cordova run ios
 
 Substitute ios for android if not on a Mac.
 
-#this is ivan
+## DEPENDENCIES: 
+# To use the contact feature of the app, run this: 
+ionic cordova plugin add cordova-plugin-contacts
+npm install --save @ionic-native/contacts 
