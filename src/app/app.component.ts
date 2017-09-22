@@ -4,6 +4,7 @@ import { Platform, MenuController, Nav } from 'ionic-angular';
 
 import { TabsPage } from '../pages/tabs/tabs';
 import { ListPage } from '../pages/list/list';
+import { ContactPage } from '../pages/contact/contact';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -12,7 +13,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
   templateUrl: 'app.html'
 })
 export class MyApp {
-  rootPage:any = HomePage;
+  rootPage:any = ContactPage;
   pages: Array<{title: string, component: any}>;
   @ViewChild(Nav) nav: Nav;
 

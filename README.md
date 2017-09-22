@@ -28,3 +28,8 @@ Substitute ios for android if not on a Mac.
 # To use the contact feature of the app, run this: 
 ionic cordova plugin add cordova-plugin-contacts
 npm install --save @ionic-native/contacts 
+
+
+# For Firebase:
+npm install angularfire2 firebase --save
+
