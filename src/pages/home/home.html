@@ -7,6 +7,80 @@
 </ion-header>
  
 <ion-content padding>
+  <ion-list class="accordion-list">
+    <ion-list-header *ngFor="let item of contactlist; let i = index" no-lines no-padding>
+      <button ion-item (click)="toggleContactHolder(i)" detail-none [ngClass]="{'section-active': item.open, 'section': !item.open}">
+        <ion-icon item-left name="arrow-forward" *ngIf="!item.open"></ion-icon>
+        <ion-icon item-left name="arrow-down" *ngIf="item.open"></ion-icon>
+          {{ item.displayName }}
+
+          {{item.daytime | date: "shortTime"}}
+      </button>
+      
+      <ion-item *ngIf="item.displayName && item.open">
+          {{item.phoneNumbers[0].value}}
+      </ion-item>
+    </ion-list-header>
+  </ion-list>
+</ion-content>
+
+<!--
+<ion-content class="list-avatar-page">
+  <ion-list>
+
+    <ion-list-header>Contact Soon</ion-list-header>
+
+    <ion-item *ngFor="let item of contactlist; let i = index"
+    (click)="toggleContactHolder(i)">
+      <ion-avatar item-start>
+        <img src="assets/img/avatar.png">
+      </ion-avatar>
+      <h2>{{item.displayName}}</h2>
+      <ion-item *ngIf="item.open" item-end>{{item.description}}</ion-item>
+      <ion-note item-end>{{item.daytime | date: "shortTime"}}</ion-note>
+    </ion-item>
+
+    <ion-item>
+      <ion-avatar item-start>
+        <img src="assets/img/avatar-ts-buzz.png">
+      </ion-avatar>
+      <h2>Buzz Lightyear</h2>
+      <p>My eyeballs could have been sucked from their sockets!</p>
+      <ion-note item-end>1:12 pm</ion-note>
+    </ion-item>
+
+
+  </ion-list>
+
+  <ion-list>
+
+    <ion-list-header>Contact Later</ion-list-header>
+
+    <ion-item>
+      <ion-avatar item-start>
+        <img src="assets/img/avatar-ts-jessie.png">
+      </ion-avatar>
+      <h2>Jessie</h2>
+      <p>Well aren't you just the sweetest space toy I ever did meet!</p>
+      <ion-note item-end>10:03 am</ion-note>
+    </ion-item>
+
+    <ion-item>
+      <ion-avatar item-start>
+        <img src="assets/img/avatar-ts-potatohead.png">
+      </ion-avatar>
+      <h2>Mr. Potato Head</h2>
+      <p>You're not turning me into a Mashed Potato.</p>
+      <ion-note item-end>5:47 am</ion-note>
+    </ion-item>
+
+  </ion-list>
+
+</ion-content>
+
+-->
+
+<!--
   <ion-list>
     <span *ngFor="let contact of contactlist" >
       <ion-item *ngIf="contact.displayName">
@@ -14,4 +88,4 @@
       </ion-item>
     </span>
   </ion-list>
-</ion-content>
+-->
