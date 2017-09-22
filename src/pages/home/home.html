@@ -5,6 +5,7 @@
     </ion-title>
   </ion-navbar>
 </ion-header>
+<!--
  
 <ion-content padding>
   <ion-list class="accordion-list">
@@ -23,21 +24,29 @@
     </ion-list-header>
   </ion-list>
 </ion-content>
+-->
 
-<!--
 <ion-content class="list-avatar-page">
   <ion-list>
 
     <ion-list-header>Contact Soon</ion-list-header>
 
-    <ion-item *ngFor="let item of contactlist; let i = index"
-    (click)="toggleContactHolder(i)">
+    <ion-item *ngFor="let item of contactlist; let i = index">
       <ion-avatar item-start>
         <img src="assets/img/avatar.png">
       </ion-avatar>
-      <h2>{{item.displayName}}</h2>
+      <h2>{{item.displayName}} - {{item.satisfed}}</h2>
       <ion-item *ngIf="item.open" item-end>{{item.description}}</ion-item>
-      <ion-note item-end>{{item.daytime | date: "shortTime"}}</ion-note>
+      
+
+      <button ion-button icon-only item-end
+      (click)="satisfyContact(i)">
+        <ion-icon name="checkmark"></ion-icon>
+      </button>
+
+      <ion-note item-end>
+        {{item.daytime | date: "shortTime"}}
+      </ion-note>
     </ion-item>
 
     <ion-item>
@@ -48,7 +57,6 @@
       <p>My eyeballs could have been sucked from their sockets!</p>
       <ion-note item-end>1:12 pm</ion-note>
     </ion-item>
-
 
   </ion-list>
 
@@ -78,7 +86,6 @@
 
 </ion-content>
 
--->
 
 <!--
   <ion-list>

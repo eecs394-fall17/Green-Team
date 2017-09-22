@@ -1,3 +1,14 @@
 page-contact {
+  .section {
+      background: #fff;
+      color: #000;
+  }
+  .section-active {
+      background: #bbb;
+      color: #fff;
+  }
 
+  .child {
+      color: #000;
+  }
 }
