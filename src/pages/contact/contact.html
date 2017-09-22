@@ -17,7 +17,19 @@
     <ion-item
     (click)="toggleContactHolder(contact.$key)"
     [ngClass]="{'section-active': openedContact == contact.$key, 'section': openedContact == contact.$key}">
-      {{contact.title}}
+      {{contact.name}}      
+
+      <button ion-button icon-only item-end
+      (click)="removeContact(contact.$key)">
+        <ion-icon name="checkmark"></ion-icon>
+      </button>
+
+      <button ion-button icon-only item-end
+      (click)="showOptions(contact.$key, contact.name)">
+        <ion-icon name="redo"></ion-icon>
+      </button>
+
+      <ion-note item-end>{{ contact.daytime }}</ion-note>
     </ion-item>
     <ion-item *ngIf="openedContact == contact.$key">
       Contact via: Phone, Text
