@@ -14,19 +14,19 @@
 <ion-content padding>
 
   <h3>Add a Contact Plan:</h3>
-  <form (ngSubmit)="logForm()">
+  <form (ngSubmit)="logForm()">       
     <ion-item>
-      <ion-label>Contact Name:</ion-label>
+      <ion-label floating >Contact Name:</ion-label> 
       <ion-input type="text" [(ngModel)]="contact.name" name="name"></ion-input>
-    </ion-item>
+    </ion-item> 
 
     <ion-item>
-      <ion-label>Description:</ion-label>
+      <ion-label floating >Description:</ion-label>
       <ion-textarea [(ngModel)]="contact.description" name="description"></ion-textarea>
     </ion-item>
 
     <ion-item>
-      <ion-label>Time</ion-label>
+      <ion-label floating >Time</ion-label>
       <ion-datetime displayFormat="h:mm A" pickerFormat="h mm A" [(ngModel)]="contact.daytime" [ngModelOptions]="{standalone: true}"></ion-datetime>
     </ion-item>
     <button ion-button type="submit" block>Add Contact Plan</button>
