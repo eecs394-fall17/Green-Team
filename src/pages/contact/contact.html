@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-navbar>
+  <ion-navbar color="primary">
     <ion-title>
       Keep In Touch
     </ion-title>
@@ -18,21 +18,33 @@
     (click)="toggleContactHolder(contact.$key)"
     [ngClass]="{'section-active': openedContact == contact.$key, 'section': openedContact == contact.$key}">
       {{contact.name}}      
+    <div *ngIf="contact.description">
+      {{contact.description}}      
+    </div>
 
-      <button ion-button icon-only item-end
+    <ion-note>{{contact.repeat}} at {{contact.daytime}}</ion-note>
+
+      <button ion-button icon-only item-end small 
       (click)="removeContact(contact.$key)">
-        <ion-icon name="checkmark"></ion-icon>
+        <ion-icon name="md-checkmark"></ion-icon>
       </button>
 
-      <button ion-button icon-only item-end
+      <button ion-button icon-only item-end small 
       (click)="showOptions(contact.$key, contact.name)">
-        <ion-icon name="redo"></ion-icon>
+        <ion-icon name="more"></ion-icon>
       </button>
 
-      <ion-note item-end>{{ contact.daytime }}</ion-note>
+      
     </ion-item>
+
+
     <ion-item *ngIf="openedContact == contact.$key">
-      Contact via: Phone, Text
+      <button ion-button icon-only item-start outline small color="secondary">
+        <ion-icon name="call"> </ion-icon>
+      </button>
+      <button ion-button icon-only item-start outline small color="secondary">
+        <ion-icon name="text"> </ion-icon>
+      </button>
     </ion-item>
   </div>
 </ion-list>

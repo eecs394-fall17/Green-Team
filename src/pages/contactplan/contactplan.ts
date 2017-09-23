@@ -1,17 +1,31 @@
+
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 
 import { AngularFireModule } from 'angularfire2';
-import { AngularFireDatabaseModule, AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
+import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 import { AngularFireAuthModule, AngularFireAuth } from 'angularfire2/auth';
+import { Contact } from './../../models/contact'; //we import the contat model 
 
 @Component({
   selector: 'page-contactplan',
   templateUrl: 'contactplan.html'
 })
+
+
+
+
 export class ContactplanPage {
-  contacts: FirebaseListObservable<any>;
-  contact = {};
+  contact = {}; //We'll make this be contact = {} as Contact
+  contacts: FirebaseListObservable<any>; // We'll change any to Contact
+
+  repeats = [
+    "Daily",
+    "Weekly",
+    "Fortnightly",
+    "Monthly",
+    "Yearly"
+  ];
 
   constructor(public navCtrl: NavController,
   public navParams: NavParams,

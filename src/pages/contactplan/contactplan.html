@@ -3,11 +3,6 @@
     <ion-title>
       Keep In Touch
     </ion-title>
-    <ion-buttons end>
-      <button ion-button icon-only (click)="addContact()">
-        <ion-icon name="add"></ion-icon>
-      </button>
-    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
@@ -23,6 +18,13 @@
     <ion-item>
       <ion-label floating >Description:</ion-label>
       <ion-textarea [(ngModel)]="contact.description" name="description"></ion-textarea>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Repeat</ion-label>
+      <ion-select [(ngModel)]="contact.repeat" name="repeat">
+        <ion-option *ngFor="let repeat of repeats">{{repeat}}</ion-option>
+      </ion-select>
     </ion-item>
 
     <ion-item>

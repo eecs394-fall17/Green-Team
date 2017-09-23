@@ -3,7 +3,6 @@ import { NavController } from 'ionic-angular';
 
 import { ContactplanPage } from '../contactplan/contactplan';
 
-import { AngularFireModule } from 'angularfire2';
 import { AngularFireDatabaseModule, AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 import { AngularFireAuthModule, AngularFireAuth } from 'angularfire2/auth';
 
@@ -15,17 +14,17 @@ import { ActionSheetController } from 'ionic-angular';
   templateUrl: 'contact.html'
 })
 export class ContactPage {
-  contacts: FirebaseListObservable<any>;
-  openedContact: any;
+  contacts: FirebaseListObservable<any>; //the array that is stored on the firebase database
+  openedContact: any;  
 
   constructor(public navCtrl: NavController, 
       public alertCtrl: AlertController,
       public actionSheetCtrl: ActionSheetController,
       db: AngularFireDatabase, afAuth: AngularFireAuth) {
-    this.contacts = db.list('/contacts');
+    this.contacts = db.list('/contacts');   //this sets the db data to the variable within the view
     this.openedContact = undefined;
-  }
-
+  } 
+  /*
   addContact(){
     let prompt = this.alertCtrl.create({
       title: 'Contact Plan',
@@ -55,6 +54,7 @@ export class ContactPage {
     });
     prompt.present();
   }
+  */
 
   showOptions(contactId, contactTitle) {
     let actionSheet = this.actionSheetCtrl.create({
