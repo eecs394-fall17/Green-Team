@@ -38,14 +38,14 @@
     </ion-item>
 
 
-    <ion-item *ngIf="openedContact == contact.$key">
+    <div *ngIf="openedContact == contact.$key">
       <button ion-button icon-only item-start outline small color="secondary">
         <ion-icon name="call"> </ion-icon>
       </button>
       <button ion-button icon-only item-start outline small color="secondary">
         <ion-icon name="text"> </ion-icon>
       </button>
-    </ion-item>
+    </div>
   </div>
 </ion-list>
 </ion-content>

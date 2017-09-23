@@ -3,7 +3,7 @@ import { NavController } from 'ionic-angular';
 
 import { ContactplanPage } from '../contactplan/contactplan';
 
-import { AngularFireDatabaseModule, AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
+import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 import { AngularFireAuthModule, AngularFireAuth } from 'angularfire2/auth';
 
 import { AlertController } from 'ionic-angular';
@@ -61,17 +61,19 @@ export class ContactPage {
       title: 'What do you want to do?',
       buttons: [
         {
+          text: 'Update Contact Plan',
+          handler: () => {
+            this.updateContact(contactId, contactTitle);
+          }
+        },
+        {
           text: 'Remove Contact Plan',
           role: 'destructive',
           handler: () => {
             this.removeContact(contactId);
           }
-        },{
-          text: 'Update contact',
-          handler: () => {
-            this.updateContact(contactId, contactTitle);
-          }
-        },{
+        },
+        {
           text: 'Cancel',
           role: 'cancel',
           handler: () => {
