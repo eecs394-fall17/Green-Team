@@ -5,7 +5,7 @@ import { NavController, NavParams } from 'ionic-angular';
 
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 import { AngularFireAuthModule, AngularFireAuth } from 'angularfire2/auth';
-import { Contact } from './../../models/contact'; //we import the contat model 
+import { myContact } from './../../models/contact'; //we import the contact model 
 
 @Component({
   selector: 'page-contactplan',

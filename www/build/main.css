@@ -25198,3 +25198,38 @@ ion-navbar.toolbar {
     padding-top: calc(16px + 20px);
   }
 }
+
+page-contact .section {
+  background: #fff;
+  color: #000;
+}
+
+page-contact .section-active {
+  background: #eee;
+}
+
+page-contact .child {
+  color: #000;
+}
+
+page-home .accordion-list {
+  height: 100%;
+}
+
+page-home .section {
+  background: #fff;
+  color: #000;
+}
+
+page-home .section-active {
+  background: #bbb;
+  color: #fff;
+}
+
+page-home .child {
+  color: #000;
+}
+
+page-home .label {
+  margin: 0px;
+}
