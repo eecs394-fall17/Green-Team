@@ -27,7 +27,8 @@ export class MyApp {
     // set our app's pages
     this.pages = [
       { title: 'My Tabs', component: TabsPage },
-      { title: 'My First List', component: ListPage }
+      { title: 'My First List', component: ListPage },
+      { title: 'Contacts', component: ContactPage }
     ];
   }
 

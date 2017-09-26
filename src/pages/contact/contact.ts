@@ -9,12 +9,16 @@ import { AngularFireAuthModule, AngularFireAuth } from 'angularfire2/auth';
 import { AlertController } from 'ionic-angular';
 import { ActionSheetController } from 'ionic-angular';
 
+import { TimeUntil } from '../../pipes/time-until'
+
 @Component({
   selector: 'page-contact',
   templateUrl: 'contact.html'
 })
 export class ContactPage {
   contacts: FirebaseListObservable<any>; //the array that is stored on the firebase database
+  todaycontacts: FirebaseListObservable<any>;
+  latercontacts: FirebaseListObservable<any>;
   openedContact: any;  
 
   constructor(public navCtrl: NavController, 
@@ -23,7 +27,28 @@ export class ContactPage {
       db: AngularFireDatabase, afAuth: AngularFireAuth) {
     this.contacts = db.list('/contacts');   //this sets the db data to the variable within the view
     this.openedContact = undefined;
+
+    var dayBegin = new Date();
+    dayBegin.setHours(0,0,0,0);
+    var dayEnd = new Date();
+    dayEnd.setHours(23,59,59,999);
+
+    this.todaycontacts = db.list('/contacts', {
+      query: {
+        orderByChild: 'daytime',
+        startAt: dayBegin.toISOString(),
+        endAt: dayEnd.toISOString()
+      }
+    });
+
+    this.latercontacts = db.list('/contacts', {
+      query: {
+        orderByChild: 'daytime',
+        startAt: dayEnd.toISOString()
+      }
+    });
   } 
+  
   /*
   addContact(){
     let prompt = this.alertCtrl.create({

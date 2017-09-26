@@ -12,17 +12,21 @@
 </ion-header>
 
 <ion-content padding>
-  <ion-list class="accordion-list">
-  <div *ngFor="let contact of contacts | async; let i = index">
-    <ion-item
-    (click)="toggleContactHolder(contact.$key)"
-    [ngClass]="{'section-active': openedContact == contact.$key, 'section': openedContact == contact.$key}">
-      {{contact.name}}      
-    <div *ngIf="contact.description">
-      {{contact.description}}      
-    </div>
 
-    <ion-note>{{contact.repeat}} at {{contact.daytime}}</ion-note>
+  <h4>Today</h4>
+  <ion-list class="accordion-list">
+  <div *ngFor="let contact of todaycontacts | async; let i = index">
+    <ion-item
+      (click)="toggleContactHolder(contact.$key)"
+      [ngClass]="{'section-active': openedContact == contact.$key, 'section': openedContact == contact.$key}">
+
+      {{contact.name}}      
+      
+      <div *ngIf="contact.description">
+        {{contact.description}}      
+      </div>
+
+      <ion-note>{{contact.repeat}} at {{contact.daytime | timeUntil}}</ion-note>
 
       <button ion-button icon-only item-end small 
       (click)="removeContact(contact.$key)">
@@ -33,19 +37,55 @@
       (click)="showOptions(contact.$key, contact.name)">
         <ion-icon name="more"></ion-icon>
       </button>
-
-      
     </ion-item>
-
 
     <div *ngIf="openedContact == contact.$key">
       <button ion-button icon-only item-start outline small color="secondary">
         <ion-icon name="call"> </ion-icon>
       </button>
+
       <button ion-button icon-only item-start outline small color="secondary">
         <ion-icon name="text"> </ion-icon>
       </button>
     </div>
   </div>
-</ion-list>
+  </ion-list>
+
+  <h4>Later</h4>
+  <ion-list class="accordion-list">
+  <div *ngFor="let contact of latercontacts | async; let i = index">
+    <ion-item
+      (click)="toggleContactHolder(contact.$key)"
+      [ngClass]="{'section-active': openedContact == contact.$key, 'section': openedContact == contact.$key}">
+
+      {{contact.name}}      
+        
+      <div *ngIf="contact.description">
+        {{contact.description}}      
+      </div>
+
+      <ion-note>{{contact.repeat}} at {{contact.daytime | timeUntil}}</ion-note>
+
+      <button ion-button icon-only item-end small 
+        (click)="removeContact(contact.$key)">
+          <ion-icon name="md-checkmark"></ion-icon>
+      </button>
+
+      <button ion-button icon-only item-end small 
+        (click)="showOptions(contact.$key, contact.name)">
+          <ion-icon name="more"></ion-icon>
+      </button>
+    </ion-item>
+
+    <div *ngIf="openedContact == contact.$key">
+      <button ion-button icon-only item-start outline small color="secondary">
+        <ion-icon name="call"> </ion-icon>
+      </button>
+
+      <button ion-button icon-only item-start outline small color="secondary">
+        <ion-icon name="text"> </ion-icon>
+      </button>
+    </div>
+  </div>
+  </ion-list>
 </ion-content>

@@ -5,7 +5,8 @@ import { NavController, NavParams } from 'ionic-angular';
 
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 import { AngularFireAuthModule, AngularFireAuth } from 'angularfire2/auth';
-import { myContact } from './../../models/contact'; //we import the contact model 
+import { Contact } from '../../models/contact.interface';
+//import { ContactPlan } from '../../models/contactplan.interface';
 
 @Component({
   selector: 'page-contactplan',
@@ -16,7 +17,7 @@ import { myContact } from './../../models/contact'; //we import the contact mode
 
 
 export class ContactplanPage {
-  contact = {}; //We'll make this be contact = {} as Contact
+  contact = {} as Contact;
   contacts: FirebaseListObservable<any>; // We'll change any to Contact
 
   repeats = [
@@ -24,13 +25,16 @@ export class ContactplanPage {
     "Weekly",
     "Fortnightly",
     "Monthly",
-    "Yearly"
+    "Yearly",
+    "Never"
   ];
 
   constructor(public navCtrl: NavController,
   public navParams: NavParams,
   db: AngularFireDatabase) {
     this.contacts = db.list('/contacts');
+
+    this.contact.daytime = (new Date()).toISOString();
   }
 
   logForm() {
