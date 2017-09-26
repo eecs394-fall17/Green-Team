@@ -25,16 +25,4 @@ $ ionic cordova run ios
 Substitute ios for android if not on a Mac.
 
 ## DEPENDENCIES: 
-# To use the contact feature of the app, run this: 
-ionic cordova plugin add cordova-plugin-contacts
-npm install --save @ionic-native/contacts 
-
-
-# For Firebase:
-npm install angularfire2 firebase --save
-
-# For moment:
-npm install moment --save
-
-# To build...there is some random polyfill error
-npm install promise-polyfill --save-exact
+Run npm install
