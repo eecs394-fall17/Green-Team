@@ -20,16 +20,17 @@
       (click)="toggleContactHolder(contact.$key)"
       [ngClass]="{'section-active': openedContact == contact.$key, 'section': openedContact == contact.$key}">
 
-      {{contact.name}}      
-      
-      <div *ngIf="contact.description">
+      <div>{{contact.name}}</div>    
+        
+      <div class="darkgrey" *ngIf="contact.description">
         {{contact.description}}      
       </div>
 
-      <ion-note>{{contact.repeat}} at {{contact.daytime | timeUntil}}</ion-note>
+      <div>{{contact.daytime | timeOfDay}}, {{contact.repeat}}</div>
+
 
       <button ion-button icon-only item-end small 
-      (click)="removeContact(contact.$key)">
+      (click)="repeatContact(contact.$key, contact.daytime, contact.repeat)">
         <ion-icon name="md-checkmark"></ion-icon>
       </button>
 
@@ -58,16 +59,16 @@
       (click)="toggleContactHolder(contact.$key)"
       [ngClass]="{'section-active': openedContact == contact.$key, 'section': openedContact == contact.$key}">
 
-      {{contact.name}}      
+      <div>{{contact.name}}</div>    
         
-      <div *ngIf="contact.description">
+      <div class="darkgrey" *ngIf="contact.description">
         {{contact.description}}      
       </div>
 
-      <ion-note>{{contact.repeat}} at {{contact.daytime | timeUntil}}</ion-note>
+      <div>{{contact.daytime | timeOfDay:['day']}}, {{contact.repeat}}</div>
 
       <button ion-button icon-only item-end small 
-        (click)="removeContact(contact.$key)">
+        (click)="repeatContact(contact.$key, contact.daytime, contact.repeat)">
           <ion-icon name="md-checkmark"></ion-icon>
       </button>
 

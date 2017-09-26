@@ -26,7 +26,7 @@ export class ContactplanPage {
     "Fortnightly",
     "Monthly",
     "Yearly",
-    "Never"
+    "Once"
   ];
 
   constructor(public navCtrl: NavController,

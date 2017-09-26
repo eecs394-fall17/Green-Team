@@ -9,7 +9,7 @@ import { AngularFireAuthModule, AngularFireAuth } from 'angularfire2/auth';
 import { AlertController } from 'ionic-angular';
 import { ActionSheetController } from 'ionic-angular';
 
-import { TimeUntil } from '../../pipes/time-until'
+import * as moment from 'moment'
 
 @Component({
   selector: 'page-contact',
@@ -139,6 +139,22 @@ export class ContactPage {
       ]
     });
     prompt.present();
+  }
+
+  repeatContact(contactId: string, time, rep) {
+    var repeats = {
+      "Daily": ['d', 1],
+      "Weekly": ['w', 1],
+      "Fortnightly": ['w', 2],
+      "Monthly": ['M', 1],
+      "Yearly": ['M', 12]
+    };
+
+    var rep_type = repeats[rep];
+    var new_date = moment(time).add(rep_type[1], rep_type[0]);
+    this.contacts.update(contactId, {
+      daytime: new_date.toISOString()
+    });
   }
 
   removeContact(contactId: string){

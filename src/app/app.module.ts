@@ -13,7 +13,7 @@ import { TabsPage } from '../pages/tabs/tabs';
 import { ListPage } from '../pages/list/list';
 import { ItemDetailsPage } from '../pages/item-details/item-details';
 
-import { TimeUntil } from '../pipes/time-until'
+import { TimeOfDay } from '../pipes/time'
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -41,7 +41,7 @@ export const firebaseConfig = {
     TabsPage,
     ListPage,
     ItemDetailsPage,
-    TimeUntil
+    TimeOfDay
   ],
   imports: [
     BrowserModule,

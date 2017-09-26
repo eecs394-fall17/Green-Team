@@ -33,3 +33,5 @@ npm install --save @ionic-native/contacts
 # For Firebase:
 npm install angularfire2 firebase --save
 
+# For moment:
+npm install moment --save

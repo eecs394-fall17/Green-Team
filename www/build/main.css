@@ -25212,6 +25212,10 @@ page-contact .child {
   color: #000;
 }
 
+page-contact .darkgrey {
+  color: #999;
+}
+
 page-home .accordion-list {
   height: 100%;
 }
