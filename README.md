@@ -35,3 +35,6 @@ npm install angularfire2 firebase --save
 
 # For moment:
 npm install moment --save
+
+# To build...there is some random polyfill error
+npm install promise-polyfill --save-exact
