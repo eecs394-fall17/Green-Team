@@ -24,5 +24,38 @@ $ ionic cordova run ios
 
 Substitute ios for android if not on a Mac.
 
+### How to run this app on your machine
+Clone and cd into the repository
+```bash
+$ git clone https://github.com/eecs394-fall17/Green-Team.git
+$ cd Green-Team/
+```
+Install all the dependencies
+```bash
+npm install
+```
+# Run on server
+```bash
+$ ionic serve
+```
+
+# Run on android 
+```bash
+$ ionic cordova build android
+$ ionic cordova run android
+```
+
 ## DEPENDENCIES: 
-Run npm install
+# For the contact feature of the app, run this: 
+ionic cordova plugin add cordova-plugin-contacts
+npm install --save @ionic-native/contacts 
+
+
+# For Firebase:
+npm install angularfire2 firebase --save
+
+# For moment:
+npm install moment --save
+
+# To build...there is some random polyfill error
+npm install promise-polyfill --save-exact
