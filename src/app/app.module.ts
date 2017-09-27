@@ -5,13 +5,11 @@ import { Platform, MenuController, Nav } from 'ionic-angular';
 import { Contacts } from '@ionic-native/contacts';
 import { MyApp } from './app.component';
 
-import { AboutPage } from '../pages/about/about';
 import { ContactPage } from '../pages/contact/contact';
 import { ContactplanPage } from '../pages/contactplan/contactplan';
-import { HomePage } from '../pages/home/home';
-import { TabsPage } from '../pages/tabs/tabs';
-import { ListPage } from '../pages/list/list';
-import { ItemDetailsPage } from '../pages/item-details/item-details';
+
+
+
 
 import { TimeOfDay } from '../pipes/time'
 
@@ -34,13 +32,8 @@ export const firebaseConfig = {
 @NgModule({
   declarations: [
     MyApp,
-    AboutPage,
     ContactPage,
     ContactplanPage,
-    HomePage,
-    TabsPage,
-    ListPage,
-    ItemDetailsPage,
     TimeOfDay
   ],
   imports: [
@@ -53,13 +46,8 @@ export const firebaseConfig = {
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    AboutPage,
     ContactPage,
     ContactplanPage,
-    HomePage,
-    TabsPage,
-    ListPage,
-    ItemDetailsPage
   ],
   providers: [
     StatusBar,

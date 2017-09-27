@@ -2,8 +2,6 @@ import { HomePage } from './../pages/home/home';
 import { Component, ViewChild  } from '@angular/core';
 import { Platform, MenuController, Nav } from 'ionic-angular';
 
-import { TabsPage } from '../pages/tabs/tabs';
-import { ListPage } from '../pages/list/list';
 import { ContactPage } from '../pages/contact/contact';
 
 import { StatusBar } from '@ionic-native/status-bar';
@@ -26,8 +24,6 @@ export class MyApp {
 
     // set our app's pages
     this.pages = [
-      { title: 'My Tabs', component: TabsPage },
-      { title: 'My First List', component: ListPage },
       { title: 'Contacts', component: ContactPage }
     ];
   }
