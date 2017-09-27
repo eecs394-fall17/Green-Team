@@ -24,7 +24,7 @@ $ ionic cordova run ios
 
 Substitute ios for android if not on a Mac.
 
-### How to run this app on your machine
+# How to run this app on your machine
 Clone and cd into the repository
 ```bash
 $ git clone https://github.com/eecs394-fall17/Green-Team.git
@@ -34,12 +34,12 @@ Install all the dependencies
 ```bash
 npm install
 ```
-# Run on server
+## Run on server
 ```bash
 $ ionic serve
 ```
 
-# Run on android 
+## Run on android 
 ```bash
 $ ionic cordova build android
 $ ionic cordova run android
