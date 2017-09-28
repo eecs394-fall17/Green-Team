@@ -1,4 +1,3 @@
-import { repeat } from 'rxjs/operator/repeat';
 export interface Contact {
   id: number;
   displayName: string;

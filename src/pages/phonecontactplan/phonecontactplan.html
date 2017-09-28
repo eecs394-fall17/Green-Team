@@ -8,11 +8,11 @@
 
 <ion-content padding>
 
-  <h3>Add a Custom Contact Plan:</h3>
+  <h3>Add a Contact Plan From Your Phone:</h3>
   <form (ngSubmit)="logForm()">       
     <ion-item>
       <ion-label floating >Contact Name:</ion-label> 
-      <ion-input type="text" [(ngModel)]="contact.name" name="name"></ion-input>
+      <ion-input type="text" [(ngModel)]="contact.displayName" name="name"></ion-input>
     </ion-item> 
 
     <ion-item>

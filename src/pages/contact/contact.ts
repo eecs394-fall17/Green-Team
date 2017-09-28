@@ -9,8 +9,8 @@ import { AngularFireAuthModule, AngularFireAuth } from 'angularfire2/auth';
 import { AlertController } from 'ionic-angular';
 import { ActionSheetController } from 'ionic-angular';
 
-import * as moment from 'moment'
-
+import * as moment from 'moment';
+ 
 @Component({
   selector: 'page-contact',
   templateUrl: 'contact.html'

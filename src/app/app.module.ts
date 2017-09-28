@@ -1,3 +1,4 @@
+import { HomePage } from './../pages/home/home';
 import { NgModule, ErrorHandler } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
@@ -19,6 +20,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireDatabaseModule, AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 import { AngularFireAuthModule, AngularFireAuth } from 'angularfire2/auth';
+import { PhonecontactplanPage } from '../pages/phonecontactplan/phonecontactplan';
 
 export const firebaseConfig = {
     apiKey: "AIzaSyBJhOg72no3tBYZp-dQSB4pOf2vPBRvoj8",
@@ -34,7 +36,9 @@ export const firebaseConfig = {
     MyApp,
     ContactPage,
     ContactplanPage,
-    TimeOfDay
+    TimeOfDay,
+    HomePage,
+    PhonecontactplanPage
   ],
   imports: [
     BrowserModule,
@@ -48,6 +52,8 @@ export const firebaseConfig = {
     MyApp,
     ContactPage,
     ContactplanPage,
+    HomePage,
+    PhonecontactplanPage
   ],
   providers: [
     StatusBar,

@@ -3,23 +3,21 @@ import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 
 
+
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 import { AngularFireAuthModule, AngularFireAuth } from 'angularfire2/auth';
 import { Contact } from '../../models/contact.interface';
 //import { ContactPlan } from '../../models/contactplan.interface';
 
 @Component({
-  selector: 'page-contactplan',
-  templateUrl: 'contactplan.html'
+  selector: 'page-phonecontactplan',
+  templateUrl: 'phonecontactplan.html',
 })
-
-
-
-
-export class ContactplanPage {
+export class PhonecontactplanPage {
   contact = {} as Contact;
   contacts: FirebaseListObservable<any>; // We'll change any to Contact
 
+  phoneContact = {} as any;
   repeats = [
     "Daily",
     "Weekly",
@@ -30,9 +28,13 @@ export class ContactplanPage {
   ];
 
   constructor(public navCtrl: NavController, public navParams: NavParams, db: AngularFireDatabase) {
-    this.contacts = db.list('/contacts');
-    this.contact.repeat = this.repeats[1];
-    this.contact.daytime = (new Date()).toISOString();
+    this.contacts = db.list('/contacts'); //setting up database
+    this.phoneContact = navParams.get('item'); //getting the object from the the previous page
+    console.log(this.phoneContact.displayName);
+
+    this.contact.displayName = this.phoneContact.displayName; //setting name from phone to this contact's info
+    this.contact.repeat = this.repeats[1]; //making it automatically be weekly
+    this.contact.daytime = (new Date()).toISOString(); 
   }
 
   logForm() {
