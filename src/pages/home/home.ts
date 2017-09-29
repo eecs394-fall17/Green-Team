@@ -22,6 +22,7 @@ export class HomePage {
       contacts.find([ 'displayName'], options).then((contacts) => {
         this.contactlist = contacts;
         
+        /*
         this.contactlist.sort(function(a, b){
               var nameA = a.displayName;
               var nameB = b.displayName;
@@ -34,6 +35,7 @@ export class HomePage {
               }
               return 0 //default return value (no sorting)
           });
+          */
         console.log(this.contactlist);
         
       }, (error) => {
