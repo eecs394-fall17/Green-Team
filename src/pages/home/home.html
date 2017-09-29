@@ -7,6 +7,10 @@
 </ion-header>
 
 <ion-content padding>
+  <ion-item>
+    <ion-label floating>Search:</ion-label>
+    <ion-textarea [(ngModel)]="query" name="query"></ion-textarea>
+  </ion-item>
   <ion-list>
     <button ion-item *ngFor="let contact of contactlist" (click)="tapped($event, contact)">
       <ion-item *ngIf="contact.displayName">

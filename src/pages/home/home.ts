@@ -8,17 +8,34 @@ import { PhonecontactplanPage } from '../phonecontactplan/phonecontactplan';
   templateUrl: 'home.html'
 })
 export class HomePage {
-  contactlist: any; 
+  contactlist: any;
+
   constructor(public navCtrl: NavController, public platform: Platform, private contacts: Contacts) {
     this.platform.ready().then(() => {
-      var options = {                                
+      var options = {   
+        filter: '',                          
         multiple: true,        
-        hasPhoneNumber:true,                             
-        fields:  [ 'displayName', 'name' ]
+        hasPhoneNumber: true,                             
+        fields:  [ 'displayName']
       };
      
-      contacts.find([ 'displayName', 'name'], options).then((contacts) => {
+      contacts.find([ 'displayName'], options).then((contacts) => {
         this.contactlist = contacts;
+        
+        this.contactlist.sort(function(a, b){
+              var nameA = a.displayName;
+              var nameB = b.displayName;
+          
+              if (nameA < nameB){ //sort string ascending
+                  return -1;  
+              }
+              if (nameA > nameB){
+                  return 1;
+              }
+              return 0 //default return value (no sorting)
+          });
+        console.log(this.contactlist);
+        
       }, (error) => {
         console.log(error);
       });
