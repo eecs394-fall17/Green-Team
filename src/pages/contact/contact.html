@@ -39,10 +39,10 @@
       </button>
       </ion-item>
 
-      <div *ngIf="openedContact == contact.$key">
-        <button ion-button icon-only item-start outline small color="secondary">
-        <ion-icon name="call"> </ion-icon>
-      </button>
+      <div>
+        <button ion-button icon-only item-start outline small color="secondary" (click)="callThem(contact.phoneNumbers[0].value)">
+          <ion-icon name="call"> </ion-icon>
+        </button>
 
         <button ion-button icon-only item-start outline small color="secondary">
         <ion-icon name="text"> </ion-icon>
@@ -74,7 +74,7 @@
       </ion-item>
 
       <div *ngIf="openedContact == contact.$key">
-        <button ion-button icon-only item-start outline small color="secondary">
+        <button ion-button icon-only item-start outline small color="secondary" (click)="callThem()">
         <ion-icon name="call"> </ion-icon>
       </button>
 

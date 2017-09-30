@@ -16,11 +16,12 @@ export class HomePage {
         multiple: true,        
         hasPhoneNumber: true,
         desiredFields: ['name.formatted', 'phoneNumbers'],                            
-        fields:  [ 'name.formatted']
+        fields:  [ 'name.formatted', 'phoneNumbers']
       };
      
-      contacts.find([ 'name'], options).then((contacts) => {
-        console.log(contacts[0].phoneNumbers);
+      contacts.find(['name'], options).then((contacts) => {  
+        console.log(contacts);
+        
         
         this.contactlist = contacts;
       

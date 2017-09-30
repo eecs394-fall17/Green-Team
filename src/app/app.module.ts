@@ -1,3 +1,4 @@
+import { CallNumber } from '@ionic-native/call-number';
 import { HomePage } from './../pages/home/home';
 import { NgModule, ErrorHandler } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
@@ -59,6 +60,7 @@ export const firebaseConfig = {
     StatusBar,
     SplashScreen,
     Contacts,
+    CallNumber,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })

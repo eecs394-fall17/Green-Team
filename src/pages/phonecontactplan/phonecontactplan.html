@@ -12,7 +12,7 @@
   <form (ngSubmit)="logForm()">       
     <ion-item>
       <ion-label floating >Contact Name:</ion-label> 
-      <ion-input type="text" [(ngModel)]="contact.displayName" name="name"></ion-input>
+      <ion-input type="text" [(ngModel)]="contact.name" name="name"></ion-input>
     </ion-item> 
 
     <ion-list *ngFor="let number of contact.phoneNumbers">

@@ -31,10 +31,10 @@ export class PhonecontactplanPage {
     this.contacts = db.list('/contacts'); //setting up database
     this.phoneContact = navParams.get('item'); //getting the object from the the previous page
     
-    console.log(this.phoneContact.phoneNumbers);
+    //console.log(this.phoneContact.phoneNumbers);
     
-    this.contact.displayName = this.phoneContact.name.formatted; //setting name from phone to this contact's info
-    this.contact.phoneNumbers = this.phoneContact.phoneNumbers;
+    this.contact.name = this.phoneContact.name.formatted; //setting name from phone to this contact's info
+    this.contact.phoneNumbers = this.phoneContact.phoneNumbers; //this is an array
     
     this.contact.repeat = this.repeats[1]; //making it automatically be weekly
     this.contact.daytime = (new Date()).toISOString(); 
