@@ -2,9 +2,10 @@ import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 
 import { ContactplanPage } from '../contactplan/contactplan';
+import { HomePage } from './../home/home';
 
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
-import { AngularFireAuthModule, AngularFireAuth } from 'angularfire2/auth';
+//import { AngularFireAuthModule, AngularFireAuth } from 'angularfire2/auth';
 
 import { AlertController } from 'ionic-angular';
 import { ActionSheetController } from 'ionic-angular';
@@ -24,7 +25,7 @@ export class ContactPage {
   constructor(public navCtrl: NavController, 
       public alertCtrl: AlertController,
       public actionSheetCtrl: ActionSheetController,
-      db: AngularFireDatabase, afAuth: AngularFireAuth) {
+      db: AngularFireDatabase, /*afAuth: AngularFireAuth*/) {
     this.contacts = db.list('/contacts');   //this sets the db data to the variable within the view
     this.openedContact = undefined;
 
@@ -78,8 +79,37 @@ export class ContactPage {
       ]
     });
     prompt.present();
-  }
+  } 
   */
+  choosePlan(){
+    let actionSheet = this.actionSheetCtrl.create({
+      title: 'Create a New Contact Plan',
+      buttons: [
+        {
+          text: 'Choose Contact from Phone',
+          handler: () => {
+            this.navCtrl.push(HomePage, {
+            });
+          }
+        },
+        {
+          text: 'Create a Custom Contact',
+          handler: () => {
+            this.navCtrl.push(ContactplanPage, {
+            });
+          }
+        },
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            console.log('Cancel clicked');
+          }
+        }
+      ]
+    });
+    actionSheet.present();
+  }
 
   showOptions(contactId, contactTitle) {
     let actionSheet = this.actionSheetCtrl.create({
@@ -167,10 +197,5 @@ export class ContactPage {
     } else {
       this.openedContact = undefined;
     }
-  }
-
-  newContact(event) {
-    this.navCtrl.push(ContactplanPage, {
-    });
   }
 }

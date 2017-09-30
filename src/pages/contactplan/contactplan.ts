@@ -40,6 +40,6 @@ export class ContactplanPage {
     //pushing the newly created contact from the form to the db
     this.contacts.push(this.contact); 
     //going back to the previous page
-    this.navCtrl.pop();
+    this.navCtrl.popToRoot();
   }
 }

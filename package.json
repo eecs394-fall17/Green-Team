@@ -42,7 +42,9 @@
         "promise-polyfill": "6.0.2",
         "rxjs": "5.4.0",
         "sw-toolbox": "3.6.0",
-        "zone.js": "0.8.12"
+        "zone.js": "0.8.12",
+        "cordova-ios": "^4.4.0",
+        "cordova-plugin-ionic": "^1.1.9"
     },
     "devDependencies": {
         "@ionic/app-scripts": "2.1.4",
@@ -57,10 +59,20 @@
             "cordova-plugin-statusbar": {},
             "cordova-plugin-whitelist": {},
             "ionic-plugin-keyboard": {},
-            "cordova-plugin-contacts": {}
+            "cordova-plugin-contacts": {
+                "CONTACTS_USAGE_DESCRIPTION": "to make plans"
+            },
+            "cordova-plugin-ionic": {
+                "APP_ID": "ee33b717",
+                "CHANNEL_NAME": "Master",
+                "UPDATE_METHOD": "background",
+                "UPDATE_API": "https://api.ionicjs.com",
+                "MAX_STORE": "2"
+            }
         },
         "platforms": [
-            "android"
+            "android",
+            "ios"
         ]
     }
 }
