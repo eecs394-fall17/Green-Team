@@ -13,9 +13,9 @@
   </ion-item>
   <ion-list>
     <button ion-item *ngFor="let contact of contactlist" (click)="tapped($event, contact)">
-      <ion-item *ngIf="contact.displayName">
-          {{contact.displayName}}
-      </ion-item>
+      <div *ngIf="contact.name">
+          {{contact.name.formatted}} 
+      </div>
     </button>
   </ion-list>
 </ion-content>

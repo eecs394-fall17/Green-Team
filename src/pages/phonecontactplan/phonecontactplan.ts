@@ -30,9 +30,8 @@ export class PhonecontactplanPage {
   constructor(public navCtrl: NavController, public navParams: NavParams, db: AngularFireDatabase) {
     this.contacts = db.list('/contacts'); //setting up database
     this.phoneContact = navParams.get('item'); //getting the object from the the previous page
-    console.log(this.phoneContact.displayName);
 
-    this.contact.displayName = this.phoneContact.displayName; //setting name from phone to this contact's info
+    this.contact.displayName = this.phoneContact.name.formatted; //setting name from phone to this contact's info
     this.contact.repeat = this.repeats[1]; //making it automatically be weekly
     this.contact.daytime = (new Date()).toISOString(); 
   }

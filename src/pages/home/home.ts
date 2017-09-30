@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController, Platform } from 'ionic-angular';
-import { Contacts, Contact, ContactField, ContactName } from '@ionic-native/contacts';
+import { Contacts, Contact} from '@ionic-native/contacts';
 import { PhonecontactplanPage } from '../phonecontactplan/phonecontactplan';
 
 @Component({
@@ -9,7 +9,6 @@ import { PhonecontactplanPage } from '../phonecontactplan/phonecontactplan';
 })
 export class HomePage {
   contactlist: any;
-
   constructor(public navCtrl: NavController, public platform: Platform, private contacts: Contacts) {
     this.platform.ready().then(() => {
       var options = {   
@@ -20,14 +19,16 @@ export class HomePage {
       };
      
       contacts.find([ 'displayName'], options).then((contacts) => {
-        this.contactlist = contacts;
+        console.log(contacts[0].name.formatted);
         
+        this.contactlist = contacts;
+      
         /*
         this.contactlist.sort(function(a, b){
               var nameA = a.displayName;
               var nameB = b.displayName;
           
-              if (nameA < nameB){ //sort string ascending
+              if (nameA < nameB){ //sort string ascending 
                   return -1;  
               }
               if (nameA > nameB){
@@ -45,9 +46,7 @@ export class HomePage {
   }
 
   tapped(event, info) {
-    // console.log(info.displayName);
-    // console.log(info.emails);
-    // console.log(info.phoneNumbers);
+
     this.navCtrl.push(PhonecontactplanPage, {
       item: info
     });
