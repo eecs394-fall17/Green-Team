@@ -14,12 +14,13 @@ export class HomePage {
       var options = {   
         filter: '',                          
         multiple: true,        
-        hasPhoneNumber: true,                             
-        fields:  [ 'displayName']
+        hasPhoneNumber: true,
+        desiredFields: ['name.formatted', 'phoneNumbers'],                            
+        fields:  [ 'name.formatted']
       };
      
-      contacts.find([ 'displayName'], options).then((contacts) => {
-        console.log(contacts[0].name.formatted);
+      contacts.find([ 'name'], options).then((contacts) => {
+        console.log(contacts[0].phoneNumbers);
         
         this.contactlist = contacts;
       

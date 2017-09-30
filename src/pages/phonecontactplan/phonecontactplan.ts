@@ -30,8 +30,12 @@ export class PhonecontactplanPage {
   constructor(public navCtrl: NavController, public navParams: NavParams, db: AngularFireDatabase) {
     this.contacts = db.list('/contacts'); //setting up database
     this.phoneContact = navParams.get('item'); //getting the object from the the previous page
-
+    
+    console.log(this.phoneContact.phoneNumbers);
+    
     this.contact.displayName = this.phoneContact.name.formatted; //setting name from phone to this contact's info
+    this.contact.phoneNumbers = this.phoneContact.phoneNumbers;
+    
     this.contact.repeat = this.repeats[1]; //making it automatically be weekly
     this.contact.daytime = (new Date()).toISOString(); 
   }
@@ -40,7 +44,7 @@ export class PhonecontactplanPage {
     console.log(this.contact);
     //pushing the newly created contact from the form to the db
     this.contacts.push(this.contact); 
-    //going back to the previous page
+    //going back to the root page
     this.navCtrl.popToRoot(); 
   }
 }

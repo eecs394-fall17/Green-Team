@@ -1,7 +1,7 @@
 export interface Contact {
   id: number;
   displayName: string;
-  phoneNumbers: Array<{value: string}>;
+  phoneNumbers: Array<{any}>;
   description: string;
   repeat: string;
   daytime: string;

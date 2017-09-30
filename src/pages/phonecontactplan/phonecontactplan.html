@@ -15,6 +15,11 @@
       <ion-input type="text" [(ngModel)]="contact.displayName" name="name"></ion-input>
     </ion-item> 
 
+    <ion-list *ngFor="let number of contact.phoneNumbers">
+      <ion-item> <span>{{number.type}}: </span>{{number.value}}</ion-item>
+      
+    </ion-list>
+
     <ion-item>
       <ion-label floating >Description:</ion-label>
       <ion-textarea [(ngModel)]="contact.description" name="description"></ion-textarea>
