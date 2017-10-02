@@ -24,7 +24,7 @@ export class SigninPage {
     console.log(this.user);
     //pushing the newly created contact from the form to the db
     this.users.push(this.user); 
-    //going back to the previous page
-    this.navCtrl.push(ContactPage);
+    //go to root page
+    this.navCtrl.goToRoot();
   }
 }
