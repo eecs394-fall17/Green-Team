@@ -14,8 +14,8 @@
 <ion-content padding>
 
   <h4>Today</h4>
-  <ion-list class="accordion-list">
-    <div *ngFor="let contact of todaycontacts | async; let i = index">
+  <ion-list *ngIf="todaycontacts.length > 0" class="accordion-list">
+    <div *ngFor="let contact of todaycontacts; let i = index">
       <ion-item (click)="toggleContactHolder(contact.$key)" [ngClass]="{'section-active': openedContact == contact.$key, 'section': openedContact == contact.$key}">
 
         <div>{{contact.name}}</div>
@@ -49,8 +49,8 @@
   </ion-list>
 
   <h4>Later</h4>
-  <ion-list class="accordion-list">
-    <div *ngFor="let contact of latercontacts | async; let i = index">
+  <ion-list *ngIf="latercontacts.length > 0" class="accordion-list">
+    <div *ngFor="let contact of latercontacts; let i = index">
       <ion-item (click)="toggleContactHolder(contact.$key)" [ngClass]="{'section-active': openedContact == contact.$key, 'section': openedContact == contact.$key}">
 
         <div>{{contact.name}}</div>

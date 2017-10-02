@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { NavController, NavParams } from 'ionic-angular';
 
+import { User } from '../../models/user.interface';
 import { ContactplanPage } from '../contactplan/contactplan';
 
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
@@ -15,40 +16,63 @@ import * as moment from 'moment';
   selector: 'page-contact',
   templateUrl: 'contact.html'
 })
+
 export class ContactPage {
   contacts: FirebaseListObservable<any>; //the array that is stored on the firebase database
-  todaycontacts: FirebaseListObservable<any>;
-  latercontacts: FirebaseListObservable<any>;
-  openedContact: any;  
+  todaycontacts: any; //: FirebaseListObservable<any>;
+  latercontacts: any; //: FirebaseListObservable<any>;
+  openedContact: any;
+  user = {} as User;
 
-  constructor(public navCtrl: NavController, 
-      public alertCtrl: AlertController,
-      public actionSheetCtrl: ActionSheetController,
-      db: AngularFireDatabase, afAuth: AngularFireAuth) {
-    this.contacts = db.list('/contacts');   //this sets the db data to the variable within the view
-    this.openedContact = undefined;
+  ngOnInit() {
+    this.todaycontacts = [];
+    this.latercontacts = [];
 
     var dayBegin = new Date();
     dayBegin.setHours(0,0,0,0);
     var dayEnd = new Date();
     dayEnd.setHours(23,59,59,999);
 
-    this.todaycontacts = db.list('/contacts', {
+    this.db.list('contacts', {
       query: {
         orderByChild: 'daytime',
         startAt: dayBegin.toISOString(),
         endAt: dayEnd.toISOString()
       }
+    }).subscribe(contacts => {
+      this.filterContactsByUser(contacts, this.todaycontacts);
     });
 
-    this.latercontacts = db.list('/contacts', {
+    this.db.list('contacts', {
       query: {
         orderByChild: 'daytime',
         startAt: dayEnd.toISOString()
       }
+    }).subscribe(contacts => {
+      this.filterContactsByUser(contacts, this.latercontacts);
     });
+  }
+
+  constructor(public navCtrl: NavController, 
+      public navParams: NavParams,
+      public alertCtrl: AlertController,
+      public actionSheetCtrl: ActionSheetController,
+      public db: AngularFireDatabase, afAuth: AngularFireAuth) {
+    
+    this.user = navParams.get('user');
+    this.contacts = db.list('/contacts');   //this sets the db data to the variable within the view
+    this.openedContact = undefined;
   } 
   
+  filterContactsByUser(contacts, filteredList) {
+    var filterUser = this.user;
+    contacts.forEach(c => {
+      console.log(c.username);
+      if (c.username == filterUser.username)
+        filteredList.push(c);
+    });
+  }
+
   /*
   addContact(){
     let prompt = this.alertCtrl.create({
@@ -171,6 +195,7 @@ export class ContactPage {
 
   newContact(event) {
     this.navCtrl.push(ContactplanPage, {
+      user: this.user
     });
   }
 }

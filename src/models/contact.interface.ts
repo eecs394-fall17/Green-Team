@@ -1,5 +1,5 @@
 export interface Contact {
-  id: number;
+  username: string;
   displayName: string;
   phoneNumbers: Array<{value: string}>;
   description: string;

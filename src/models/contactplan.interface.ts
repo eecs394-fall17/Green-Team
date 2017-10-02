@@ -6,6 +6,7 @@
 */
 export interface ContactPlan {
   contact_id: number;
+  user_id: number;
   displayName: string;
   description: string;
   repeat: string;
