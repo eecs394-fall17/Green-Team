@@ -3,6 +3,7 @@ import { Component, ViewChild  } from '@angular/core';
 import { Platform, MenuController, Nav } from 'ionic-angular';
 
 import { ContactPage } from '../pages/contact/contact';
+import { SigninPage } from '../pages/signin/signin';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -25,7 +26,8 @@ export class MyApp {
     // set our app's pages
     this.pages = [
       { title: 'Contacts', component: ContactPage },
-      { title: 'Home', component: HomePage }
+      { title: 'Home', component: HomePage },
+      { title: 'Sign In', component: SigninPage }
     ];
   }
 

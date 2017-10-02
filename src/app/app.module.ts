@@ -8,7 +8,8 @@ import { MyApp } from './app.component';
 
 import { ContactPage } from '../pages/contact/contact';
 import { ContactplanPage } from '../pages/contactplan/contactplan';
-
+import { PhonecontactplanPage } from '../pages/phonecontactplan/phonecontactplan';
+import { SigninPage } from '../pages/signin/signin';
 
 
 
@@ -20,7 +21,6 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireDatabaseModule, AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 import { AngularFireAuthModule, AngularFireAuth } from 'angularfire2/auth';
-import { PhonecontactplanPage } from '../pages/phonecontactplan/phonecontactplan';
 
 export const firebaseConfig = {
     apiKey: "AIzaSyBJhOg72no3tBYZp-dQSB4pOf2vPBRvoj8",
@@ -38,7 +38,8 @@ export const firebaseConfig = {
     ContactplanPage,
     TimeOfDay,
     HomePage,
-    PhonecontactplanPage
+    PhonecontactplanPage,
+    SigninPage
   ],
   imports: [
     BrowserModule,
@@ -53,7 +54,8 @@ export const firebaseConfig = {
     ContactPage,
     ContactplanPage,
     HomePage,
-    PhonecontactplanPage
+    PhonecontactplanPage,
+    SigninPage
   ],
   providers: [
     StatusBar,

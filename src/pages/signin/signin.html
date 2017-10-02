@@ -1,0 +1,28 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <ion-title>
+      Keep In Touch
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+
+  <h3>Sign In:</h3>
+  <form (ngSubmit)="logForm()">       
+    <ion-item>
+      <ion-label floating >User Name:</ion-label> 
+      <ion-input type="text" [(ngModel)]="user.name" name="name"></ion-input>
+    </ion-item> 
+
+    <ion-item>
+      <ion-label floating >Password:</ion-label>
+      <ion-textarea [(ngModel)]="user.password" name="description"></ion-textarea>
+    </ion-item>
+
+    <button ion-button type="submit" block>Sign In</button>
+  </form>
+
+
+
+</ion-content>
