@@ -39,17 +39,27 @@
       </button>
       </ion-item>
 
-      <div>
-        <button ion-button icon-only item-start outline small color="secondary" (click)="callThem(contact.phoneNumbers[0].value)">
+      <div *ngIf="openedContact == contact.$key">
+        <a *ngIf="contact.phoneNumbers" href="tel:{{contact.phoneNumbers[0].value}}" (click)="callThem(contact.phoneNumbers[0].value)">
+        <button ion-button icon-only item-start outline small color="secondary">
           <ion-icon name="call"> </ion-icon>
         </button>
-
-        <button ion-button icon-only item-start outline small color="secondary">
-        <ion-icon name="text"> </ion-icon>
-      </button>
+      </a>
+        <a *ngIf="contact.phoneNumbers" href="sms:{{contact.phoneNumbers[0].value.stringify}}" (click)="callThem(contact.phoneNumbers[0].value)">
+          <button ion-button icon-only item-start outline small color="secondary">
+            <ion-icon name="text"> </ion-icon>
+          </button>
+        </a>
+        <div *ngIf="!contact.phoneNumbers">
+          <ion-item>No Contact Methods Provided</ion-item>
+        </div>
       </div>
+
     </div>
   </ion-list>
+  <p>A phone number: <a href="tel:1-408-555-5555">1-408-555-5555</a></p>
+  <a href="sms:1-408-555-1212">New SMS Message</a>
+  <a href="mailto:frank@wwdcdemo.example.com">John Frank</a>
 
   <h4>Later</h4>
   <ion-list class="accordion-list">
@@ -74,13 +84,19 @@
       </ion-item>
 
       <div *ngIf="openedContact == contact.$key">
-        <button ion-button icon-only item-start outline small color="secondary" (click)="callThem()">
-        <ion-icon name="call"> </ion-icon>
-      </button>
-
+        <a *ngIf="contact.phoneNumbers" href="tel:{{contact.phoneNumbers[0].value}}" (click)="callThem(contact.phoneNumbers[0].value)">
         <button ion-button icon-only item-start outline small color="secondary">
-        <ion-icon name="text"> </ion-icon>
-      </button>
+          <ion-icon name="call"> </ion-icon>
+        </button>
+      </a>
+        <a *ngIf="contact.phoneNumbers" href="sms:{{contact.phoneNumbers[0].value}}" (click)="callThem(contact.phoneNumbers[0].value)">
+          <button ion-button icon-only item-start outline small color="secondary">
+            <ion-icon name="text"> </ion-icon>
+          </button>
+        </a>
+        <div *ngIf="!contact.phoneNumbers">
+          <ion-item>No Contact Methods Provided</ion-item>
+        </div>
       </div>
     </div>
   </ion-list>

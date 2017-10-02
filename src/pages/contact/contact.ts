@@ -9,8 +9,8 @@ import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/databa
 
 import { AlertController } from 'ionic-angular';
 import { ActionSheetController } from 'ionic-angular';
-import { CallNumber } from '@ionic-native/call-number';
 
+ 
 
 
 import * as moment from 'moment';
@@ -28,7 +28,6 @@ export class ContactPage {
   constructor(public navCtrl: NavController, 
       public alertCtrl: AlertController,
       public actionSheetCtrl: ActionSheetController,
-      private callNumber: CallNumber,
       db: AngularFireDatabase, /*afAuth: AngularFireAuth*/) {
     this.contacts = db.list('/contacts');   //this sets the db data to the variable within the view
     this.openedContact = undefined;
@@ -116,12 +115,7 @@ export class ContactPage {
   }
 
   callThem(number){ 
-    //console.log(number);
-    
-    this.callNumber.callNumber('1234567890', false)
-    .then(() => console.log('Launched dialer!'))
-    .catch(() => console.log('Error launching dialer'));
-    
+    console.log(number);
   }
 
   showOptions(contactId, contactTitle) {
