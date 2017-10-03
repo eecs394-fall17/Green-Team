@@ -3,12 +3,16 @@ import { NavController, NavParams } from 'ionic-angular';
 
 import { User } from '../../models/user.interface';
 import { ContactplanPage } from '../contactplan/contactplan';
+import { HomePage } from './../home/home';
 
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
-import { AngularFireAuthModule, AngularFireAuth } from 'angularfire2/auth';
+//import { AngularFireAuthModule, AngularFireAuth } from 'angularfire2/auth';
 
 import { AlertController } from 'ionic-angular';
 import { ActionSheetController } from 'ionic-angular';
+
+ 
+
 
 import * as moment from 'moment';
  
@@ -73,39 +77,43 @@ export class ContactPage {
     });
   }
 
-  /*
-  addContact(){
-    let prompt = this.alertCtrl.create({
-      title: 'Contact Plan',
-      message: "Choose a contact to plan communicating with",
-      inputs: [
-        {
-          name: 'title',
-          placeholder: 'Title'
-        },
-      ],
+  choosePlan(){
+    let actionSheet = this.actionSheetCtrl.create({
+      title: 'Create a New Contact Plan',
       buttons: [
         {
-          text: 'Cancel',
-          handler: data => {
-            console.log('Cancel clicked');
+          text: 'Choose Contact from Phone',
+          handler: () => {
+            this.navCtrl.push(HomePage, {
+            });
           }
         },
         {
-          text: 'Save',
-          handler: data => {
-            var c = this.contacts.push({
-              title: data.title
+          text: 'Create a Custom Contact',
+          handler: () => {
+            this.navCtrl.push(ContactplanPage, {
+              user: this.user
             });
+          }
+        },
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            console.log('Cancel clicked');
           }
         }
       ]
     });
-    prompt.present();
+    actionSheet.present();
   }
-  */
+
+  callThem(number){ 
+    console.log(number);
+  }
 
   showOptions(contactId, contactTitle) {
+    console.log("showOptions called");
     let actionSheet = this.actionSheetCtrl.create({
       title: 'What do you want to do?',
       buttons: [
@@ -191,11 +199,5 @@ export class ContactPage {
     } else {
       this.openedContact = undefined;
     }
-  }
-
-  newContact(event) {
-    this.navCtrl.push(ContactplanPage, {
-      user: this.user
-    });
   }
 }

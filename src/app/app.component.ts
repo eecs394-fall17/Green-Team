@@ -12,7 +12,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
   templateUrl: 'app.html'
 })
 export class MyApp {
-  rootPage:any = HomePage;
+  rootPage:any = ContactPage;
   pages: Array<{title: string, component: any}>;
   @ViewChild(Nav) nav: Nav;
 
