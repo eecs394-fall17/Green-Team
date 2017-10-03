@@ -1,3 +1,4 @@
+
 import { HomePage } from './../pages/home/home';
 import { NgModule, ErrorHandler } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
@@ -6,18 +7,21 @@ import { Platform, MenuController, Nav } from 'ionic-angular';
 import { Contacts } from '@ionic-native/contacts';
 import { MyApp } from './app.component';
 
+/*PAGES*/
 import { ContactPage } from '../pages/contact/contact';
 import { ContactplanPage } from '../pages/contactplan/contactplan';
 import { PhonecontactplanPage } from '../pages/phonecontactplan/phonecontactplan';
 import { SigninPage } from '../pages/signin/signin';
 
 
-
-import { TimeOfDay } from '../pipes/time'
+/*PIPES */
+import { TimeOfDay } from '../pipes/time';
+import { SafeUrlPipe } from './../pipes/safe-url.pipe';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
+/*FIREBASAE STUFF*/
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireDatabaseModule, AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 import { AngularFireAuthModule, AngularFireAuth } from 'angularfire2/auth';
@@ -37,6 +41,7 @@ export const firebaseConfig = {
     ContactPage,
     ContactplanPage,
     TimeOfDay,
+    SafeUrlPipe,
     HomePage,
     PhonecontactplanPage,
     SigninPage

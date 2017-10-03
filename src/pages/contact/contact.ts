@@ -64,8 +64,13 @@ export class ContactPage {
       public db: AngularFireDatabase) {
     
     this.user = navParams.get('user');
+    console.log(this.user);
+    
     this.contacts = db.list('/contacts');   //this sets the db data to the variable within the view
     this.openedContact = undefined;
+    console.log(this.todaycontacts);
+    console.log(this.latercontacts);
+    
   } 
   
   filterContactsByUser(contacts, filteredList) {
@@ -90,6 +95,7 @@ export class ContactPage {
           text: 'Choose Contact from Phone',
           handler: () => {
             this.navCtrl.push(HomePage, {
+              user: this.user
             });
           }
         },

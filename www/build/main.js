@@ -1,15 +1,15 @@
 webpackJsonp([0],{
 
-/***/ 131:
+/***/ 142:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ContactPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(23);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__contactplan_contactplan__ = __webpack_require__(233);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_angularfire2_database__ = __webpack_require__(132);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_angularfire2_auth__ = __webpack_require__(270);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(27);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__contactplan_contactplan__ = __webpack_require__(270);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__home_home__ = __webpack_require__(86);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_angularfire2_database__ = __webpack_require__(59);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_moment__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_moment___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_moment__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -26,67 +26,101 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+//import { AngularFireAuthModule, AngularFireAuth } from 'angularfire2/auth';
 
 
 
 var ContactPage = (function () {
-    function ContactPage(navCtrl, alertCtrl, actionSheetCtrl, db, afAuth) {
+    function ContactPage(navCtrl, navParams, alertCtrl, actionSheetCtrl, db) {
         this.navCtrl = navCtrl;
+        this.navParams = navParams;
         this.alertCtrl = alertCtrl;
         this.actionSheetCtrl = actionSheetCtrl;
+        this.db = db;
+        this.user = {};
+        this.user = navParams.get('user');
+        console.log(this.user);
         this.contacts = db.list('/contacts'); //this sets the db data to the variable within the view
         this.openedContact = undefined;
+        console.log(this.todaycontacts);
+        console.log(this.latercontacts);
+    }
+    ContactPage.prototype.ngOnInit = function () {
+        var _this = this;
+        this.todaycontacts = [];
+        this.latercontacts = [];
         var dayBegin = new Date();
         dayBegin.setHours(0, 0, 0, 0);
         var dayEnd = new Date();
         dayEnd.setHours(23, 59, 59, 999);
-        this.todaycontacts = db.list('/contacts', {
+        this.db.list('contacts', {
             query: {
                 orderByChild: 'daytime',
                 startAt: dayBegin.toISOString(),
                 endAt: dayEnd.toISOString()
             }
+        }).subscribe(function (contacts) {
+            _this.filterContactsByUser(contacts, _this.todaycontacts);
         });
-        this.latercontacts = db.list('/contacts', {
+        this.db.list('contacts', {
             query: {
                 orderByChild: 'daytime',
                 startAt: dayEnd.toISOString()
             }
+        }).subscribe(function (contacts) {
+            _this.filterContactsByUser(contacts, _this.latercontacts);
         });
-    }
-    /*
-    addContact(){
-      let prompt = this.alertCtrl.create({
-        title: 'Contact Plan',
-        message: "Choose a contact to plan communicating with",
-        inputs: [
-          {
-            name: 'title',
-            placeholder: 'Title'
-          },
-        ],
-        buttons: [
-          {
-            text: 'Cancel',
-            handler: data => {
-              console.log('Cancel clicked');
+    };
+    ContactPage.prototype.filterContactsByUser = function (contacts, filteredList) {
+        var filterUser = this.user;
+        if (filterUser == undefined)
+            return;
+        filteredList.length = 0;
+        contacts.forEach(function (c) {
+            if (c.username == filterUser.username) {
+                filteredList.push(c);
+                console.log(filteredList);
             }
-          },
-          {
-            text: 'Save',
-            handler: data => {
-              var c = this.contacts.push({
-                title: data.title
-              });
-            }
-          }
-        ]
-      });
-      prompt.present();
-    }
-    */
+        });
+    };
+    ContactPage.prototype.choosePlan = function () {
+        var _this = this;
+        var actionSheet = this.actionSheetCtrl.create({
+            title: 'Create a New Contact Plan',
+            buttons: [
+                {
+                    text: 'Choose Contact from Phone',
+                    handler: function () {
+                        _this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_3__home_home__["a" /* HomePage */], {
+                            user: _this.user
+                        });
+                    }
+                },
+                {
+                    text: 'Create a Custom Contact',
+                    handler: function () {
+                        _this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_2__contactplan_contactplan__["a" /* ContactplanPage */], {
+                            user: _this.user
+                        });
+                    }
+                },
+                {
+                    text: 'Cancel',
+                    role: 'cancel',
+                    handler: function () {
+                        console.log('Cancel clicked');
+                    }
+                }
+            ]
+        });
+        actionSheet.present();
+    };
+    ContactPage.prototype.callThem = function (number) {
+        console.log(number);
+    };
     ContactPage.prototype.showOptions = function (contactId, contactTitle) {
         var _this = this;
+        console.log("showOptions called");
         var actionSheet = this.actionSheetCtrl.create({
             title: 'What do you want to do?',
             buttons: [
@@ -170,16 +204,13 @@ var ContactPage = (function () {
             this.openedContact = undefined;
         }
     };
-    ContactPage.prototype.newContact = function (event) {
-        this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_2__contactplan_contactplan__["a" /* ContactplanPage */], {});
-    };
     return ContactPage;
 }());
 ContactPage = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'page-contact',template:/*ion-inline-start:"C:\cygwin64\home\Matinee\Green-Team\src\pages\contact\contact.html"*/'<ion-header>\n  <ion-navbar color="primary">\n    <ion-title>\n      Keep In Touch\n    </ion-title>\n    <ion-buttons end>\n      <button ion-button icon-only (click)="newContact()">\n        <ion-icon name="add"></ion-icon>\n      </button>\n    </ion-buttons>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n\n  <h4>Today</h4>\n  <ion-list class="accordion-list">\n  <div *ngFor="let contact of todaycontacts | async; let i = index">\n    <ion-item\n      (click)="toggleContactHolder(contact.$key)"\n      [ngClass]="{\'section-active\': openedContact == contact.$key, \'section\': openedContact == contact.$key}">\n\n      <div>{{contact.name}}</div>    \n        \n      <div class="darkgrey" *ngIf="contact.description">\n        {{contact.description}}      \n      </div>\n\n      <div>{{contact.daytime | timeOfDay}}, {{contact.repeat}}</div>\n\n\n      <button ion-button icon-only item-end small \n      (click)="repeatContact(contact.$key, contact.daytime, contact.repeat)">\n        <ion-icon name="md-checkmark"></ion-icon>\n      </button>\n\n      <button ion-button icon-only item-end small \n      (click)="showOptions(contact.$key, contact.name)">\n        <ion-icon name="more"></ion-icon>\n      </button>\n    </ion-item>\n\n    <div *ngIf="openedContact == contact.$key">\n      <button ion-button icon-only item-start outline small color="secondary">\n        <ion-icon name="call"> </ion-icon>\n      </button>\n\n      <button ion-button icon-only item-start outline small color="secondary">\n        <ion-icon name="text"> </ion-icon>\n      </button>\n    </div>\n  </div>\n  </ion-list>\n\n  <h4>Later</h4>\n  <ion-list class="accordion-list">\n  <div *ngFor="let contact of latercontacts | async; let i = index">\n    <ion-item\n      (click)="toggleContactHolder(contact.$key)"\n      [ngClass]="{\'section-active\': openedContact == contact.$key, \'section\': openedContact == contact.$key}">\n\n      <div>{{contact.name}}</div>    \n        \n      <div class="darkgrey" *ngIf="contact.description">\n        {{contact.description}}      \n      </div>\n\n      <div>{{contact.daytime | timeOfDay:[\'day\']}}, {{contact.repeat}}</div>\n\n      <button ion-button icon-only item-end small \n        (click)="repeatContact(contact.$key, contact.daytime, contact.repeat)">\n          <ion-icon name="md-checkmark"></ion-icon>\n      </button>\n\n      <button ion-button icon-only item-end small \n        (click)="showOptions(contact.$key, contact.name)">\n          <ion-icon name="more"></ion-icon>\n      </button>\n    </ion-item>\n\n    <div *ngIf="openedContact == contact.$key">\n      <button ion-button icon-only item-start outline small color="secondary">\n        <ion-icon name="call"> </ion-icon>\n      </button>\n\n      <button ion-button icon-only item-start outline small color="secondary">\n        <ion-icon name="text"> </ion-icon>\n      </button>\n    </div>\n  </div>\n  </ion-list>\n</ion-content>\n'/*ion-inline-end:"C:\cygwin64\home\Matinee\Green-Team\src\pages\contact\contact.html"*/
+        selector: 'page-contact',template:/*ion-inline-start:"/Users/Durell/Desktop/Git Check/Green-Team/src/pages/contact/contact.html"*/'<ion-header>\n  <ion-navbar color="primary">\n    <button ion-button menuToggle>\n          <ion-icon name="menu"></ion-icon>\n        </button>\n    <ion-title>\n      Keep In Touch\n    </ion-title>\n    <ion-buttons end>\n      <button ion-button icon-only (click)="choosePlan()">\n        <ion-icon name="add"></ion-icon>\n      </button>\n    </ion-buttons>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n  <div>\n    <h4>Today</h4>\n    <ion-list *ngIf="todaycontacts.length > 0" class="accordion-list">\n      <div *ngFor="let contact of todaycontacts; let i = index">\n        <ion-item (click)="toggleContactHolder(contact.$key)" [ngClass]="{\'section-active\': openedContact == contact.$key, \'section\': openedContact == contact.$key}">\n\n          <div>{{contact.name}}</div>\n\n          <div class="darkgrey" *ngIf="contact.description">\n            {{contact.description}}\n          </div>\n\n          <div>{{contact.daytime | timeOfDay}}, {{contact.repeat}}</div>\n\n\n          <button ion-button icon-only item-end small (click)="repeatContact(contact.$key, contact.daytime, contact.repeat)">\n        <ion-icon name="md-checkmark"></ion-icon>\n      </button>\n\n          <button ion-button icon-only item-end small (click)="showOptions(contact.$key, contact.name)">\n        <ion-icon name="more"></ion-icon>\n      </button>\n        </ion-item>\n\n        <div *ngIf="openedContact == contact.$key">\n          <a *ngIf="contact.phoneNumbers" href="tel:{{contact.phoneNumbers[0].value}}" (click)="callThem(contact.phoneNumbers[0].value)">\n        <button ion-button icon-only item-start outline small color="secondary">\n          <ion-icon name="call"> </ion-icon>\n        </button>\n      </a>\n          <a *ngIf="contact.phoneNumbers" [attr.href]="\'sms:\'+contact.phoneNumbers[0].value | safeUrl" (click)="callThem(contact.phoneNumbers[0].value)">\n          <button ion-button icon-only item-start outline small color="secondary">\n            <ion-icon name="text"> </ion-icon>\n          </button>\n        </a>\n          <div *ngIf="!contact.phoneNumbers">\n            <ion-item>No Contact Methods Provided</ion-item>\n          </div>\n        </div>\n\n      </div>\n    </ion-list>\n\n    <h4>Later</h4>\n    <ion-list *ngIf="latercontacts.length > 0" class="accordion-list">\n      <div *ngFor="let contact of latercontacts; let i = index">\n        <ion-item (click)="toggleContactHolder(contact.$key)" [ngClass]="{\'section-active\': openedContact == contact.$key, \'section\': openedContact == contact.$key}">\n\n          <div>{{contact.name}}</div>\n\n          <div class="darkgrey" *ngIf="contact.description">\n            {{contact.description}}\n          </div>\n\n          <div>{{contact.daytime | timeOfDay:[\'day\']}}, {{contact.repeat}}</div>\n\n          <button ion-button icon-only item-end small (click)="repeatContact(contact.$key, contact.daytime, contact.repeat)">\n          <ion-icon name="md-checkmark"></ion-icon>\n      </button>\n\n          <button ion-button icon-only item-end small (click)="showOptions(contact.$key, contact.name)">\n          <ion-icon name="more"></ion-icon>\n      </button>\n        </ion-item>\n\n        <div *ngIf="openedContact == contact.$key">\n          <a *ngIf="contact.phoneNumbers" href="tel:{{contact.phoneNumbers[0].value}}" (click)="callThem(contact.phoneNumbers[0].value)">\n        <button ion-button icon-only item-start outline small color="secondary">\n          <ion-icon name="call"> </ion-icon>\n        </button>\n      </a>\n          <a *ngIf="contact.phoneNumbers" href="sms:{{contact.phoneNumbers[0].value}}" (click)="callThem(contact.phoneNumbers[0].value)">\n          <button ion-button icon-only item-start outline small color="secondary">\n            <ion-icon name="text"> </ion-icon>\n          </button>\n        </a>\n          <div *ngIf="!contact.phoneNumbers">\n            <ion-item>No Contact Methods Provided</ion-item>\n          </div>\n        </div>\n      </div>\n    </ion-list>\n  </div>\n</ion-content>'/*ion-inline-end:"/Users/Durell/Desktop/Git Check/Green-Team/src/pages/contact/contact.html"*/
     }),
-    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavController */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["b" /* AlertController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["b" /* AlertController */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["a" /* ActionSheetController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["a" /* ActionSheetController */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_3_angularfire2_database__["a" /* AngularFireDatabase */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3_angularfire2_database__["a" /* AngularFireDatabase */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_4_angularfire2_auth__["a" /* AngularFireAuth */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4_angularfire2_auth__["a" /* AngularFireAuth */]) === "function" && _e || Object])
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavController */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavParams */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavParams */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["b" /* AlertController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["b" /* AlertController */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["a" /* ActionSheetController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["a" /* ActionSheetController */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_4_angularfire2_database__["a" /* AngularFireDatabase */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4_angularfire2_database__["a" /* AngularFireDatabase */]) === "function" && _e || Object])
 ], ContactPage);
 
 var _a, _b, _c, _d, _e;
@@ -187,7 +218,7 @@ var _a, _b, _c, _d, _e;
 
 /***/ }),
 
-/***/ 148:
+/***/ 150:
 /***/ (function(module, exports) {
 
 function webpackEmptyAsyncContext(req) {
@@ -200,11 +231,11 @@ function webpackEmptyAsyncContext(req) {
 webpackEmptyAsyncContext.keys = function() { return []; };
 webpackEmptyAsyncContext.resolve = webpackEmptyAsyncContext;
 module.exports = webpackEmptyAsyncContext;
-webpackEmptyAsyncContext.id = 148;
+webpackEmptyAsyncContext.id = 150;
 
 /***/ }),
 
-/***/ 189:
+/***/ 191:
 /***/ (function(module, exports) {
 
 function webpackEmptyAsyncContext(req) {
@@ -217,82 +248,7 @@ function webpackEmptyAsyncContext(req) {
 webpackEmptyAsyncContext.keys = function() { return []; };
 webpackEmptyAsyncContext.resolve = webpackEmptyAsyncContext;
 module.exports = webpackEmptyAsyncContext;
-webpackEmptyAsyncContext.id = 189;
-
-/***/ }),
-
-/***/ 231:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TabsPage; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__about_about__ = __webpack_require__(232);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__contact_contact__ = __webpack_require__(131);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__home_home__ = __webpack_require__(388);
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-
-
-
-var TabsPage = (function () {
-    function TabsPage() {
-        this.tab1Root = __WEBPACK_IMPORTED_MODULE_3__home_home__["a" /* HomePage */];
-        this.tab2Root = __WEBPACK_IMPORTED_MODULE_1__about_about__["a" /* AboutPage */];
-        this.tab3Root = __WEBPACK_IMPORTED_MODULE_2__contact_contact__["a" /* ContactPage */];
-    }
-    return TabsPage;
-}());
-TabsPage = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({template:/*ion-inline-start:"C:\cygwin64\home\Matinee\Green-Team\src\pages\tabs\tabs.html"*/'<ion-tabs>\n  <ion-tab [root]="tab1Root" tabTitle="Home" tabIcon="home"></ion-tab>\n  <ion-tab [root]="tab2Root" tabTitle="About" tabIcon="information-circle"></ion-tab>\n  <ion-tab [root]="tab3Root" tabTitle="Contact" tabIcon="contacts"></ion-tab>\n</ion-tabs>\n'/*ion-inline-end:"C:\cygwin64\home\Matinee\Green-Team\src\pages\tabs\tabs.html"*/
-    }),
-    __metadata("design:paramtypes", [])
-], TabsPage);
-
-//# sourceMappingURL=tabs.js.map
-
-/***/ }),
-
-/***/ 232:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AboutPage; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(23);
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-
-var AboutPage = (function () {
-    function AboutPage(navCtrl) {
-        this.navCtrl = navCtrl;
-    }
-    return AboutPage;
-}());
-AboutPage = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'page-about',template:/*ion-inline-start:"C:\cygwin64\home\Matinee\Green-Team\src\pages\about\about.html"*/'<ion-header>\n  <ion-navbar>\n    <ion-title>\n      About\n    </ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n\n</ion-content>\n'/*ion-inline-end:"C:\cygwin64\home\Matinee\Green-Team\src\pages\about\about.html"*/
-    }),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavController */]])
-], AboutPage);
-
-//# sourceMappingURL=about.js.map
+webpackEmptyAsyncContext.id = 191;
 
 /***/ }),
 
@@ -300,10 +256,77 @@ AboutPage = __decorate([
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return PhonecontactplanPage; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(27);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_angularfire2_database__ = __webpack_require__(59);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+//import { ContactPlan } from '../../models/contactplan.interface';
+var PhonecontactplanPage = (function () {
+    function PhonecontactplanPage(navCtrl, navParams, db) {
+        this.navCtrl = navCtrl;
+        this.navParams = navParams;
+        this.user = {};
+        this.contact = {};
+        this.phoneContact = {};
+        this.repeats = [
+            "Daily",
+            "Weekly",
+            "Fortnightly",
+            "Monthly",
+            "Yearly",
+            "Once"
+        ];
+        this.contacts = db.list('/contacts'); //setting up database
+        this.phoneContact = navParams.get('item'); //getting the object from the the previous page
+        //console.log(this.phoneContact.phoneNumbers);
+        this.contact.name = this.phoneContact.name.formatted; //setting name from phone to this contact's info
+        this.contact.phoneNumbers = this.phoneContact.phoneNumbers; //this is an array
+        this.contact.repeat = this.repeats[1]; //making it automatically be weekly
+        this.contact.daytime = (new Date()).toISOString();
+        this.user = navParams.get('user');
+        console.log(this.user);
+        this.contact.username = this.user.username;
+    }
+    PhonecontactplanPage.prototype.logForm = function () {
+        console.log(this.contact);
+        //pushing the newly created contact from the form to the db
+        this.contacts.push(this.contact);
+        //going back to the root page
+        this.navCtrl.popToRoot();
+    };
+    return PhonecontactplanPage;
+}());
+PhonecontactplanPage = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
+        selector: 'page-phonecontactplan',template:/*ion-inline-start:"/Users/Durell/Desktop/Git Check/Green-Team/src/pages/phonecontactplan/phonecontactplan.html"*/'<ion-header>\n  <ion-navbar color="primary">\n    <ion-title>\n      Keep In Touch\n    </ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n\n  <h3>Add a Contact Plan From Your Phone:</h3>\n  <form (ngSubmit)="logForm()">       \n    <ion-item>\n      <ion-label floating >Contact Name:</ion-label> \n      <ion-input type="text" [(ngModel)]="contact.name" name="name"></ion-input>\n    </ion-item> \n\n    <ion-list *ngFor="let number of contact.phoneNumbers">\n      <ion-item> <span>{{number.type}}: </span>{{number.value}}</ion-item>\n      \n    </ion-list>\n\n    <ion-item>\n      <ion-label floating >Description:</ion-label>\n      <ion-textarea [(ngModel)]="contact.description" name="description"></ion-textarea>\n    </ion-item>\n\n    <ion-item>\n      <ion-label>Repeat</ion-label>\n      <ion-select [(ngModel)]="contact.repeat" name="repeat">\n        <ion-option *ngFor="let repeat of repeats">{{repeat}}</ion-option>\n      </ion-select>\n    </ion-item>\n\n    <ion-item>\n      <ion-label floating >Start Date</ion-label>\n      <ion-datetime displayFormat="YYYY/MM/DD" pickerFormat="YYYY MMM DDD" [(ngModel)]="contact.daytime" [ngModelOptions]="{standalone: true}"></ion-datetime>\n    </ion-item>\n    \n    <ion-item>\n      <ion-label floating >Start Time</ion-label>\n      <ion-datetime displayFormat="h:mm A" pickerFormat="h mm A" [(ngModel)]="contact.daytime" [ngModelOptions]="{standalone: true}"></ion-datetime>\n    </ion-item>\n    <button ion-button type="submit" block>Add Contact Plan</button>\n  </form>\n\n\n\n</ion-content>'/*ion-inline-end:"/Users/Durell/Desktop/Git Check/Green-Team/src/pages/phonecontactplan/phonecontactplan.html"*/,
+    }),
+    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavParams */], __WEBPACK_IMPORTED_MODULE_2_angularfire2_database__["a" /* AngularFireDatabase */]])
+], PhonecontactplanPage);
+
+//# sourceMappingURL=phonecontactplan.js.map
+
+/***/ }),
+
+/***/ 270:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ContactplanPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(23);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_angularfire2_database__ = __webpack_require__(132);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(27);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_angularfire2_database__ = __webpack_require__(59);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -321,6 +344,7 @@ var ContactplanPage = (function () {
     function ContactplanPage(navCtrl, navParams, db) {
         this.navCtrl = navCtrl;
         this.navParams = navParams;
+        this.user = {};
         this.contact = {};
         this.repeats = [
             "Daily",
@@ -331,36 +355,41 @@ var ContactplanPage = (function () {
             "Once"
         ];
         this.contacts = db.list('/contacts');
+        this.contact.repeat = this.repeats[1];
         this.contact.daytime = (new Date()).toISOString();
+        this.user = navParams.get('user');
+        this.contact.username = this.user.username;
     }
     ContactplanPage.prototype.logForm = function () {
         console.log(this.contact);
+        //pushing the newly created contact from the form to the db
         this.contacts.push(this.contact);
-        this.navCtrl.pop();
+        //going back to the previous page
+        this.navCtrl.popToRoot();
     };
     return ContactplanPage;
 }());
 ContactplanPage = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'page-contactplan',template:/*ion-inline-start:"C:\cygwin64\home\Matinee\Green-Team\src\pages\contactplan\contactplan.html"*/'<ion-header>\n  <ion-navbar>\n    <ion-title>\n      Keep In Touch\n    </ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n\n  <h3>Add a Contact Plan:</h3>\n  <form (ngSubmit)="logForm()">       \n    <ion-item>\n      <ion-label floating >Contact Name:</ion-label> \n      <ion-input type="text" [(ngModel)]="contact.name" name="name"></ion-input>\n    </ion-item> \n\n    <ion-item>\n      <ion-label floating >Description:</ion-label>\n      <ion-textarea [(ngModel)]="contact.description" name="description"></ion-textarea>\n    </ion-item>\n\n    <ion-item>\n      <ion-label>Repeat</ion-label>\n      <ion-select [(ngModel)]="contact.repeat" name="repeat">\n        <ion-option *ngFor="let repeat of repeats">{{repeat}}</ion-option>\n      </ion-select>\n    </ion-item>\n\n    <ion-item>\n      <ion-label floating >Start Date</ion-label>\n      <ion-datetime displayFormat="YYYY/MM/DD" pickerFormat="YYYY MMM DDD" [(ngModel)]="contact.daytime" [ngModelOptions]="{standalone: true}"></ion-datetime>\n    </ion-item>\n    \n    <ion-item>\n      <ion-label floating >Start Time</ion-label>\n      <ion-datetime displayFormat="h:mm A" pickerFormat="h mm A" [(ngModel)]="contact.daytime" [ngModelOptions]="{standalone: true}"></ion-datetime>\n    </ion-item>\n    <button ion-button type="submit" block>Add Contact Plan</button>\n  </form>\n\n\n\n</ion-content>'/*ion-inline-end:"C:\cygwin64\home\Matinee\Green-Team\src\pages\contactplan\contactplan.html"*/
+        selector: 'page-contactplan',template:/*ion-inline-start:"/Users/Durell/Desktop/Git Check/Green-Team/src/pages/contactplan/contactplan.html"*/'<ion-header>\n  <ion-navbar color="primary">\n    <ion-title>\n      Keep In Touch\n    </ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n\n  <h3>Add a Custom Contact Plan:</h3>\n  <form (ngSubmit)="logForm()">       \n    <ion-item>\n      <ion-label floating >Contact Name:</ion-label> \n      <ion-input type="text" [(ngModel)]="contact.name" name="name"></ion-input>\n    </ion-item> \n\n    <ion-item>\n      <ion-label floating >Description:</ion-label>\n      <ion-textarea [(ngModel)]="contact.description" name="description"></ion-textarea>\n    </ion-item>\n\n    <ion-item>\n      <ion-label>Repeat</ion-label>\n      <ion-select [(ngModel)]="contact.repeat" name="repeat">\n        <ion-option *ngFor="let repeat of repeats">{{repeat}}</ion-option>\n      </ion-select>\n    </ion-item>\n\n    <ion-item>\n      <ion-label floating >Start Date</ion-label>\n      <ion-datetime displayFormat="YYYY/MM/DD" pickerFormat="YYYY MMM DDD" [(ngModel)]="contact.daytime" [ngModelOptions]="{standalone: true}"></ion-datetime>\n    </ion-item>\n    \n    <ion-item>\n      <ion-label floating >Start Time</ion-label>\n      <ion-datetime displayFormat="h:mm A" pickerFormat="h mm A" [(ngModel)]="contact.daytime" [ngModelOptions]="{standalone: true}"></ion-datetime>\n    </ion-item>\n    <button ion-button type="submit" block>Add Contact Plan</button>\n  </form>\n\n\n\n</ion-content>'/*ion-inline-end:"/Users/Durell/Desktop/Git Check/Green-Team/src/pages/contactplan/contactplan.html"*/
     }),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavController */],
-        __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavParams */],
-        __WEBPACK_IMPORTED_MODULE_2_angularfire2_database__["a" /* AngularFireDatabase */]])
+    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavParams */], __WEBPACK_IMPORTED_MODULE_2_angularfire2_database__["a" /* AngularFireDatabase */]])
 ], ContactplanPage);
 
 //# sourceMappingURL=contactplan.js.map
 
 /***/ }),
 
-/***/ 388:
+/***/ 386:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return HomePage; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SigninPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(23);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_contacts__ = __webpack_require__(229);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(27);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_angularfire2_database__ = __webpack_require__(59);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_angularfire2_auth__ = __webpack_require__(387);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__pages_contact_contact__ = __webpack_require__(142);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -373,172 +402,71 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
-var HomePage = (function () {
-    function HomePage(navCtrl, platform, contacts) {
+
+
+var SigninPage = (function () {
+    function SigninPage(navCtrl, navParams, db, afAuth) {
         this.navCtrl = navCtrl;
-        this.platform = platform;
-        this.contacts = contacts;
-        /*
-        contactlist: Array<{
-          displayName: string,
-          phoneNumbers: Array<{value: string}>,
-          daytime: Date,
-          description: string,
-          open: boolean,
-          satisfied: string
-        }>;*/
-        this.contactlist = [
-            {
-                displayName: 'Mom',
-                phoneNumbers: [{ value: "773-555-1929" }],
-                daytime: new Date(),
-                description: "Call soon about A",
-                open: false,
-                satisfied: "false"
-            },
-            {
-                displayName: 'Dad',
-                phoneNumbers: [{ value: "847-555-8557" }],
-                daytime: new Date(),
-                description: "Call to talk about B",
-                open: false,
-                satisfied: "false"
+        this.navParams = navParams;
+        this.db = db;
+        this.afAuth = afAuth;
+        this.user = {};
+        this.users = db.list('users');
+    }
+    SigninPage.prototype.logForm = function () {
+        var _this = this;
+        var potentialUser = [];
+        var ctrl = this;
+        this.db.list('users', {
+            query: {
+                orderByChild: 'username',
+                equalTo: this.user.username
             }
-        ];
-        this.platform.ready().then(function () {
-            var opts = {
-                filter: "M",
-                multiple: true,
-                hasPhoneNumber: true,
-                fields: ['displayName', 'name']
-            };
-            /*
-            contacts.find([ 'displayName', 'name' ],opts).then((contacts) => {
-              this.contactlist = contacts;
-            }, (error) => {
-              console.log(error);
+        }).subscribe(function (users) {
+            var found = false;
+            users.forEach(function (u) {
+                ctrl.loginUser(u);
+                found = true;
+                return;
             });
-            */
-        });
-    }
-    HomePage.prototype.toggleContactHolder = function (i) {
-        this.contactlist[i].open = !this.contactlist[i].open;
-    };
-    HomePage.prototype.satisfyContact = function (i) {
-        this.contactlist[i].satisfied = (!(this.contactlist[i].satisfied == "true")).toString();
-        console.log(this.contactlist[i].satisfied);
-    };
-    return HomePage;
-}());
-HomePage = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'page-home',template:/*ion-inline-start:"C:\cygwin64\home\Matinee\Green-Team\src\pages\home\home.html"*/'<ion-header>\n  <ion-navbar>\n    <ion-title>\n      Keep In Touch\n    </ion-title>\n  </ion-navbar>\n</ion-header>\n<!--\n \n<ion-content padding>\n  <ion-list class="accordion-list">\n    <ion-list-header *ngFor="let item of contactlist; let i = index" no-lines no-padding>\n      <button ion-item (click)="toggleContactHolder(i)" detail-none [ngClass]="{\'section-active\': item.open, \'section\': !item.open}">\n        <ion-icon item-left name="arrow-forward" *ngIf="!item.open"></ion-icon>\n        <ion-icon item-left name="arrow-down" *ngIf="item.open"></ion-icon>\n          {{ item.displayName }}\n\n          {{item.daytime | date: "shortTime"}}\n      </button>\n      \n      <ion-item *ngIf="item.displayName && item.open">\n          {{item.phoneNumbers[0].value}}\n      </ion-item>\n    </ion-list-header>\n  </ion-list>\n</ion-content>\n-->\n\n<ion-content class="list-avatar-page">\n  <ion-list>\n\n    <ion-list-header>Contact Soon</ion-list-header>\n\n    <ion-item *ngFor="let item of contactlist; let i = index">\n      <ion-avatar item-start>\n        <img src="assets/img/avatar.png">\n      </ion-avatar>\n      <h2>{{item.displayName}} - {{item.satisfed}}</h2>\n      <ion-item *ngIf="item.open" item-end>{{item.description}}</ion-item>\n      \n\n      <button ion-button icon-only item-end\n      (click)="satisfyContact(i)">\n        <ion-icon name="checkmark"></ion-icon>\n      </button>\n\n      <ion-note item-end>\n        {{item.daytime | date: "shortTime"}}\n      </ion-note>\n    </ion-item>\n\n    <ion-item>\n      <ion-avatar item-start>\n        <img src="assets/img/avatar-ts-buzz.png">\n      </ion-avatar>\n      <h2>Buzz Lightyear</h2>\n      <p>My eyeballs could have been sucked from their sockets!</p>\n      <ion-note item-end>1:12 pm</ion-note>\n    </ion-item>\n\n  </ion-list>\n\n  <ion-list>\n\n    <ion-list-header>Contact Later</ion-list-header>\n\n    <ion-item>\n      <ion-avatar item-start>\n        <img src="assets/img/avatar-ts-jessie.png">\n      </ion-avatar>\n      <h2>Jessie</h2>\n      <p>Well aren\'t you just the sweetest space toy I ever did meet!</p>\n      <ion-note item-end>10:03 am</ion-note>\n    </ion-item>\n\n    <ion-item>\n      <ion-avatar item-start>\n        <img src="assets/img/avatar-ts-potatohead.png">\n      </ion-avatar>\n      <h2>Mr. Potato Head</h2>\n      <p>You\'re not turning me into a Mashed Potato.</p>\n      <ion-note item-end>5:47 am</ion-note>\n    </ion-item>\n\n  </ion-list>\n\n</ion-content>\n\n\n<!--\n  <ion-list>\n    <span *ngFor="let contact of contactlist" >\n      <ion-item *ngIf="contact.displayName">\n          {{contact.displayName}} = {{contact.phoneNumbers[0].value}}\n      </ion-item>\n    </span>\n  </ion-list>\n-->'/*ion-inline-end:"C:\cygwin64\home\Matinee\Green-Team\src\pages\home\home.html"*/
-    }),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* Platform */], __WEBPACK_IMPORTED_MODULE_2__ionic_native_contacts__["a" /* Contacts */]])
-], HomePage);
-
-//# sourceMappingURL=home.js.map
-
-/***/ }),
-
-/***/ 389:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ListPage; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(23);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__item_details_item_details__ = __webpack_require__(390);
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-
-
-var ListPage = (function () {
-    function ListPage(navCtrl, navParams) {
-        this.navCtrl = navCtrl;
-        this.navParams = navParams;
-        this.selectedItem = navParams.get('item');
-        this.icons = ['flask', 'wifi', 'beer', 'football', 'basketball', 'paper-plane', 'american-football', 'boat', 'bluetooth', 'build', 'glasses'];
-        this.items = [];
-        for (var i = 1; i < 13; i++) {
-            this.items.push({
-                title: 'Item: ' + i,
-                text: 'This is #' + i,
-                icon: this.icons[Math.floor(Math.random() * this.icons.length)]
-            });
-        }
-    }
-    ListPage.prototype.itemTapped = function (event, item) {
-        this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_2__item_details_item_details__["a" /* ItemDetailsPage */], {
-            item: item
+            if (!found) {
+                _this.users.push(_this.user);
+                ctrl.loginUser(_this.user);
+            }
         });
     };
-    return ListPage;
+    SigninPage.prototype.loginUser = function (potentialUser) {
+        console.log(potentialUser);
+        //pushing the newly created contact from the form to the db
+        this.user = potentialUser;
+        //go to root page
+        this.navCtrl.popToRoot();
+        this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_4__pages_contact_contact__["a" /* ContactPage */], { user: this.user });
+        this.navCtrl.popToRoot();
+    };
+    return SigninPage;
 }());
-ListPage = __decorate([
+SigninPage = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'baselist',template:/*ion-inline-start:"C:\cygwin64\home\Matinee\Green-Team\src\pages\list\list.html"*/'<ion-header>\n  <ion-navbar>\n    <button ion-button menuToggle>\n      <ion-icon name="menu"></ion-icon>\n    </button>\n    <ion-title>My Random List</ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content>\n  <ion-list>\n    <button ion-item *ngFor="let item of items" (click)="itemTapped($event, item)">\n      <ion-icon name="{{item.icon}}" item-left></ion-icon>\n      {{item.title}}\n      <div class="item-note" item-right>\n        {{item.text}}\n      </div>\n    </button>\n  </ion-list>\n</ion-content>'/*ion-inline-end:"C:\cygwin64\home\Matinee\Green-Team\src\pages\list\list.html"*/
+        selector: 'page-signin',template:/*ion-inline-start:"/Users/Durell/Desktop/Git Check/Green-Team/src/pages/signin/signin.html"*/'<ion-header>\n  <ion-navbar color="primary">\n    <ion-title>\n      Keep In Touch\n    </ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n\n  <h3>Sign In:</h3>\n  <form (ngSubmit)="logForm()">       \n    <ion-item>\n      <ion-label floating >User Name:</ion-label> \n      <ion-input type="text" [(ngModel)]="user.username" name="name"></ion-input>\n    </ion-item> \n\n    <ion-item>\n      <ion-label floating >Password:</ion-label>\n      <ion-textarea [(ngModel)]="user.password" name="description"></ion-textarea>\n    </ion-item>\n\n    <button ion-button type="submit" block>Sign In</button>\n  </form>\n\n\n\n</ion-content>'/*ion-inline-end:"/Users/Durell/Desktop/Git Check/Green-Team/src/pages/signin/signin.html"*/
     }),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavParams */]])
-], ListPage);
+    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavController */],
+        __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavParams */],
+        __WEBPACK_IMPORTED_MODULE_2_angularfire2_database__["a" /* AngularFireDatabase */],
+        __WEBPACK_IMPORTED_MODULE_3_angularfire2_auth__["a" /* AngularFireAuth */]])
+], SigninPage);
 
-//# sourceMappingURL=list.js.map
+//# sourceMappingURL=signin.js.map
 
 /***/ }),
 
-/***/ 390:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ItemDetailsPage; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(23);
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-
-var ItemDetailsPage = (function () {
-    function ItemDetailsPage(navCtrl, navParams) {
-        this.navCtrl = navCtrl;
-        this.navParams = navParams;
-        // If we navigated to this page, we will have an item available as a nav param
-        this.selectedItem = navParams.get('item');
-    }
-    return ItemDetailsPage;
-}());
-ItemDetailsPage = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'page-item-details',template:/*ion-inline-start:"C:\cygwin64\home\Matinee\Green-Team\src\pages\item-details\item-details.html"*/'<ion-header>\n\n  <ion-navbar>\n\n    <button menuToggle *ngIf="!selectedItem">\n\n      <ion-icon name="menu"></ion-icon>\n\n    </button>\n\n    <ion-title>Item Details</ion-title>\n\n  </ion-navbar>\n\n</ion-header>\n\n\n\n<ion-content>\n\n  <h3 text-center *ngIf="selectedItem">\n\n    {{selectedItem.title}}\n\n    <ion-icon [name]="selectedItem.icon"></ion-icon>\n\n  </h3>\n\n  <h4 text-center *ngIf="selectedItem">\n\n    You navigated here from <b>{{selectedItem.title}}</b>\n\n  </h4>\n\n</ion-content>'/*ion-inline-end:"C:\cygwin64\home\Matinee\Green-Team\src\pages\item-details\item-details.html"*/
-    }),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavParams */]])
-], ItemDetailsPage);
-
-//# sourceMappingURL=item-details.js.map
-
-/***/ }),
-
-/***/ 393:
+/***/ 392:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__ = __webpack_require__(394);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_module__ = __webpack_require__(410);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__ = __webpack_require__(393);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_module__ = __webpack_require__(409);
 
 
 Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* platformBrowserDynamic */])().bootstrapModule(__WEBPACK_IMPORTED_MODULE_1__app_module__["a" /* AppModule */]);
@@ -546,30 +474,29 @@ Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* pl
 
 /***/ }),
 
-/***/ 410:
+/***/ 409:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* unused harmony export firebaseConfig */
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AppModule; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser__ = __webpack_require__(43);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular__ = __webpack_require__(23);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_contacts__ = __webpack_require__(229);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__app_component__ = __webpack_require__(458);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__pages_about_about__ = __webpack_require__(232);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__pages_contact_contact__ = __webpack_require__(131);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__pages_contactplan_contactplan__ = __webpack_require__(233);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__pages_home_home__ = __webpack_require__(388);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__pages_tabs_tabs__ = __webpack_require__(231);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__pages_list_list__ = __webpack_require__(389);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__pages_item_details_item_details__ = __webpack_require__(390);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__pipes_time__ = __webpack_require__(523);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__ionic_native_status_bar__ = __webpack_require__(391);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__ionic_native_splash_screen__ = __webpack_require__(392);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15_angularfire2__ = __webpack_require__(41);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16_angularfire2_database__ = __webpack_require__(132);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17_angularfire2_auth__ = __webpack_require__(270);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__pages_home_home__ = __webpack_require__(86);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_platform_browser__ = __webpack_require__(42);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_ionic_angular__ = __webpack_require__(27);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ionic_native_contacts__ = __webpack_require__(231);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__app_component__ = __webpack_require__(517);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__pages_contact_contact__ = __webpack_require__(142);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__pages_contactplan_contactplan__ = __webpack_require__(270);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__pages_phonecontactplan_phonecontactplan__ = __webpack_require__(233);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__pages_signin_signin__ = __webpack_require__(386);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__pipes_time__ = __webpack_require__(521);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__pipes_safe_url_pipe__ = __webpack_require__(523);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__ionic_native_status_bar__ = __webpack_require__(390);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__ionic_native_splash_screen__ = __webpack_require__(391);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14_angularfire2__ = __webpack_require__(522);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15_angularfire2_database__ = __webpack_require__(59);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16_angularfire2_auth__ = __webpack_require__(387);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -582,15 +509,17 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 
+/*PAGES*/
 
 
 
 
+/*PIPES */
 
 
 
 
-
+/*FIREBASAE STUFF*/
 
 
 
@@ -608,41 +537,38 @@ var AppModule = (function () {
     return AppModule;
 }());
 AppModule = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["L" /* NgModule */])({
+    Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["L" /* NgModule */])({
         declarations: [
-            __WEBPACK_IMPORTED_MODULE_4__app_component__["a" /* MyApp */],
-            __WEBPACK_IMPORTED_MODULE_5__pages_about_about__["a" /* AboutPage */],
+            __WEBPACK_IMPORTED_MODULE_5__app_component__["a" /* MyApp */],
             __WEBPACK_IMPORTED_MODULE_6__pages_contact_contact__["a" /* ContactPage */],
             __WEBPACK_IMPORTED_MODULE_7__pages_contactplan_contactplan__["a" /* ContactplanPage */],
-            __WEBPACK_IMPORTED_MODULE_8__pages_home_home__["a" /* HomePage */],
-            __WEBPACK_IMPORTED_MODULE_9__pages_tabs_tabs__["a" /* TabsPage */],
-            __WEBPACK_IMPORTED_MODULE_10__pages_list_list__["a" /* ListPage */],
-            __WEBPACK_IMPORTED_MODULE_11__pages_item_details_item_details__["a" /* ItemDetailsPage */],
-            __WEBPACK_IMPORTED_MODULE_12__pipes_time__["a" /* TimeOfDay */]
+            __WEBPACK_IMPORTED_MODULE_10__pipes_time__["a" /* TimeOfDay */],
+            __WEBPACK_IMPORTED_MODULE_11__pipes_safe_url_pipe__["a" /* SafeUrlPipe */],
+            __WEBPACK_IMPORTED_MODULE_0__pages_home_home__["a" /* HomePage */],
+            __WEBPACK_IMPORTED_MODULE_8__pages_phonecontactplan_phonecontactplan__["a" /* PhonecontactplanPage */],
+            __WEBPACK_IMPORTED_MODULE_9__pages_signin_signin__["a" /* SigninPage */]
         ],
         imports: [
-            __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser__["a" /* BrowserModule */],
-            __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["e" /* IonicModule */].forRoot(__WEBPACK_IMPORTED_MODULE_4__app_component__["a" /* MyApp */]),
-            __WEBPACK_IMPORTED_MODULE_15_angularfire2__["a" /* AngularFireModule */].initializeApp(firebaseConfig, 'songstest'),
-            __WEBPACK_IMPORTED_MODULE_16_angularfire2_database__["b" /* AngularFireDatabaseModule */],
-            __WEBPACK_IMPORTED_MODULE_17_angularfire2_auth__["b" /* AngularFireAuthModule */]
+            __WEBPACK_IMPORTED_MODULE_2__angular_platform_browser__["a" /* BrowserModule */],
+            __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["e" /* IonicModule */].forRoot(__WEBPACK_IMPORTED_MODULE_5__app_component__["a" /* MyApp */]),
+            __WEBPACK_IMPORTED_MODULE_14_angularfire2__["a" /* AngularFireModule */].initializeApp(firebaseConfig, 'songstest'),
+            __WEBPACK_IMPORTED_MODULE_15_angularfire2_database__["b" /* AngularFireDatabaseModule */],
+            __WEBPACK_IMPORTED_MODULE_16_angularfire2_auth__["b" /* AngularFireAuthModule */]
         ],
-        bootstrap: [__WEBPACK_IMPORTED_MODULE_2_ionic_angular__["c" /* IonicApp */]],
+        bootstrap: [__WEBPACK_IMPORTED_MODULE_3_ionic_angular__["c" /* IonicApp */]],
         entryComponents: [
-            __WEBPACK_IMPORTED_MODULE_4__app_component__["a" /* MyApp */],
-            __WEBPACK_IMPORTED_MODULE_5__pages_about_about__["a" /* AboutPage */],
+            __WEBPACK_IMPORTED_MODULE_5__app_component__["a" /* MyApp */],
             __WEBPACK_IMPORTED_MODULE_6__pages_contact_contact__["a" /* ContactPage */],
             __WEBPACK_IMPORTED_MODULE_7__pages_contactplan_contactplan__["a" /* ContactplanPage */],
-            __WEBPACK_IMPORTED_MODULE_8__pages_home_home__["a" /* HomePage */],
-            __WEBPACK_IMPORTED_MODULE_9__pages_tabs_tabs__["a" /* TabsPage */],
-            __WEBPACK_IMPORTED_MODULE_10__pages_list_list__["a" /* ListPage */],
-            __WEBPACK_IMPORTED_MODULE_11__pages_item_details_item_details__["a" /* ItemDetailsPage */]
+            __WEBPACK_IMPORTED_MODULE_0__pages_home_home__["a" /* HomePage */],
+            __WEBPACK_IMPORTED_MODULE_8__pages_phonecontactplan_phonecontactplan__["a" /* PhonecontactplanPage */],
+            __WEBPACK_IMPORTED_MODULE_9__pages_signin_signin__["a" /* SigninPage */]
         ],
         providers: [
-            __WEBPACK_IMPORTED_MODULE_13__ionic_native_status_bar__["a" /* StatusBar */],
-            __WEBPACK_IMPORTED_MODULE_14__ionic_native_splash_screen__["a" /* SplashScreen */],
-            __WEBPACK_IMPORTED_MODULE_3__ionic_native_contacts__["a" /* Contacts */],
-            { provide: __WEBPACK_IMPORTED_MODULE_0__angular_core__["v" /* ErrorHandler */], useClass: __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["d" /* IonicErrorHandler */] }
+            __WEBPACK_IMPORTED_MODULE_12__ionic_native_status_bar__["a" /* StatusBar */],
+            __WEBPACK_IMPORTED_MODULE_13__ionic_native_splash_screen__["a" /* SplashScreen */],
+            __WEBPACK_IMPORTED_MODULE_4__ionic_native_contacts__["a" /* Contacts */],
+            { provide: __WEBPACK_IMPORTED_MODULE_1__angular_core__["v" /* ErrorHandler */], useClass: __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["d" /* IonicErrorHandler */] }
         ]
     })
 ], AppModule);
@@ -651,18 +577,17 @@ AppModule = __decorate([
 
 /***/ }),
 
-/***/ 458:
+/***/ 517:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return MyApp; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(23);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__pages_tabs_tabs__ = __webpack_require__(231);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__pages_list_list__ = __webpack_require__(389);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__pages_contact_contact__ = __webpack_require__(131);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ionic_native_status_bar__ = __webpack_require__(391);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__ionic_native_splash_screen__ = __webpack_require__(392);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(27);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__pages_contact_contact__ = __webpack_require__(142);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__pages_signin_signin__ = __webpack_require__(386);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ionic_native_status_bar__ = __webpack_require__(390);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ionic_native_splash_screen__ = __webpack_require__(391);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -678,20 +603,18 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
-
 var MyApp = (function () {
     function MyApp(platform, statusBar, menu, splashScreen) {
         this.platform = platform;
         this.statusBar = statusBar;
         this.menu = menu;
         this.splashScreen = splashScreen;
-        this.rootPage = __WEBPACK_IMPORTED_MODULE_4__pages_contact_contact__["a" /* ContactPage */];
+        this.rootPage = __WEBPACK_IMPORTED_MODULE_3__pages_signin_signin__["a" /* SigninPage */];
         this.initializeApp();
         // set our app's pages
         this.pages = [
-            { title: 'My Tabs', component: __WEBPACK_IMPORTED_MODULE_2__pages_tabs_tabs__["a" /* TabsPage */] },
-            { title: 'My First List', component: __WEBPACK_IMPORTED_MODULE_3__pages_list_list__["a" /* ListPage */] },
-            { title: 'Contacts', component: __WEBPACK_IMPORTED_MODULE_4__pages_contact_contact__["a" /* ContactPage */] }
+            { title: 'Contacts', component: __WEBPACK_IMPORTED_MODULE_2__pages_contact_contact__["a" /* ContactPage */] },
+            { title: 'Sign In', component: __WEBPACK_IMPORTED_MODULE_3__pages_signin_signin__["a" /* SigninPage */] }
         ];
     }
     MyApp.prototype.initializeApp = function () {
@@ -716,252 +639,252 @@ __decorate([
     __metadata("design:type", __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* Nav */])
 ], MyApp.prototype, "nav", void 0);
 MyApp = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({template:/*ion-inline-start:"C:\cygwin64\home\Matinee\Green-Team\src\app\app.html"*/'<ion-menu [content]="content">\n\n  <ion-header>\n    <ion-toolbar>\n      <ion-title>Pages</ion-title>\n    </ion-toolbar>\n  </ion-header>\n\n  <ion-content>\n    <ion-list>\n      <button ion-item *ngFor="let p of pages" (click)="openPage(p)">\n        {{p.title}}\n      </button>\n    </ion-list>\n  </ion-content>\n\n</ion-menu>\n\n<ion-nav [root]="rootPage" #content swipeBackEnabled="false"></ion-nav>'/*ion-inline-end:"C:\cygwin64\home\Matinee\Green-Team\src\app\app.html"*/
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({template:/*ion-inline-start:"/Users/Durell/Desktop/Git Check/Green-Team/src/app/app.html"*/'<ion-menu [content]="content">\n\n  <ion-header>\n    <ion-toolbar>\n      <ion-title>Pages</ion-title>\n    </ion-toolbar>\n  </ion-header>\n\n  <ion-content>\n    <ion-list>\n      <button ion-item *ngFor="let p of pages" (click)="openPage(p)">\n        {{p.title}}\n      </button>\n    </ion-list>\n  </ion-content>\n\n</ion-menu>\n\n<ion-nav [root]="rootPage" #content swipeBackEnabled="false"></ion-nav>'/*ion-inline-end:"/Users/Durell/Desktop/Git Check/Green-Team/src/app/app.html"*/
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* Platform */],
-        __WEBPACK_IMPORTED_MODULE_5__ionic_native_status_bar__["a" /* StatusBar */],
+        __WEBPACK_IMPORTED_MODULE_4__ionic_native_status_bar__["a" /* StatusBar */],
         __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* MenuController */],
-        __WEBPACK_IMPORTED_MODULE_6__ionic_native_splash_screen__["a" /* SplashScreen */]])
+        __WEBPACK_IMPORTED_MODULE_5__ionic_native_splash_screen__["a" /* SplashScreen */]])
 ], MyApp);
 
 //# sourceMappingURL=app.component.js.map
 
 /***/ }),
 
-/***/ 522:
+/***/ 519:
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
-	"./af": 273,
-	"./af.js": 273,
-	"./ar": 274,
-	"./ar-dz": 275,
-	"./ar-dz.js": 275,
-	"./ar-kw": 276,
-	"./ar-kw.js": 276,
-	"./ar-ly": 277,
-	"./ar-ly.js": 277,
-	"./ar-ma": 278,
-	"./ar-ma.js": 278,
-	"./ar-sa": 279,
-	"./ar-sa.js": 279,
-	"./ar-tn": 280,
-	"./ar-tn.js": 280,
-	"./ar.js": 274,
-	"./az": 281,
-	"./az.js": 281,
-	"./be": 282,
-	"./be.js": 282,
-	"./bg": 283,
-	"./bg.js": 283,
-	"./bn": 284,
-	"./bn.js": 284,
-	"./bo": 285,
-	"./bo.js": 285,
-	"./br": 286,
-	"./br.js": 286,
-	"./bs": 287,
-	"./bs.js": 287,
-	"./ca": 288,
-	"./ca.js": 288,
-	"./cs": 289,
-	"./cs.js": 289,
-	"./cv": 290,
-	"./cv.js": 290,
-	"./cy": 291,
-	"./cy.js": 291,
-	"./da": 292,
-	"./da.js": 292,
-	"./de": 293,
-	"./de-at": 294,
-	"./de-at.js": 294,
-	"./de-ch": 295,
-	"./de-ch.js": 295,
-	"./de.js": 293,
-	"./dv": 296,
-	"./dv.js": 296,
-	"./el": 297,
-	"./el.js": 297,
-	"./en-au": 298,
-	"./en-au.js": 298,
-	"./en-ca": 299,
-	"./en-ca.js": 299,
-	"./en-gb": 300,
-	"./en-gb.js": 300,
-	"./en-ie": 301,
-	"./en-ie.js": 301,
-	"./en-nz": 302,
-	"./en-nz.js": 302,
-	"./eo": 303,
-	"./eo.js": 303,
-	"./es": 304,
-	"./es-do": 305,
-	"./es-do.js": 305,
-	"./es.js": 304,
-	"./et": 306,
-	"./et.js": 306,
-	"./eu": 307,
-	"./eu.js": 307,
-	"./fa": 308,
-	"./fa.js": 308,
-	"./fi": 309,
-	"./fi.js": 309,
-	"./fo": 310,
-	"./fo.js": 310,
-	"./fr": 311,
-	"./fr-ca": 312,
-	"./fr-ca.js": 312,
-	"./fr-ch": 313,
-	"./fr-ch.js": 313,
-	"./fr.js": 311,
-	"./fy": 314,
-	"./fy.js": 314,
-	"./gd": 315,
-	"./gd.js": 315,
-	"./gl": 316,
-	"./gl.js": 316,
-	"./gom-latn": 317,
-	"./gom-latn.js": 317,
-	"./he": 318,
-	"./he.js": 318,
-	"./hi": 319,
-	"./hi.js": 319,
-	"./hr": 320,
-	"./hr.js": 320,
-	"./hu": 321,
-	"./hu.js": 321,
-	"./hy-am": 322,
-	"./hy-am.js": 322,
-	"./id": 323,
-	"./id.js": 323,
-	"./is": 324,
-	"./is.js": 324,
-	"./it": 325,
-	"./it.js": 325,
-	"./ja": 326,
-	"./ja.js": 326,
-	"./jv": 327,
-	"./jv.js": 327,
-	"./ka": 328,
-	"./ka.js": 328,
-	"./kk": 329,
-	"./kk.js": 329,
-	"./km": 330,
-	"./km.js": 330,
-	"./kn": 331,
-	"./kn.js": 331,
-	"./ko": 332,
-	"./ko.js": 332,
-	"./ky": 333,
-	"./ky.js": 333,
-	"./lb": 334,
-	"./lb.js": 334,
-	"./lo": 335,
-	"./lo.js": 335,
-	"./lt": 336,
-	"./lt.js": 336,
-	"./lv": 337,
-	"./lv.js": 337,
-	"./me": 338,
-	"./me.js": 338,
-	"./mi": 339,
-	"./mi.js": 339,
-	"./mk": 340,
-	"./mk.js": 340,
-	"./ml": 341,
-	"./ml.js": 341,
-	"./mr": 342,
-	"./mr.js": 342,
-	"./ms": 343,
-	"./ms-my": 344,
-	"./ms-my.js": 344,
-	"./ms.js": 343,
-	"./my": 345,
-	"./my.js": 345,
-	"./nb": 346,
-	"./nb.js": 346,
-	"./ne": 347,
-	"./ne.js": 347,
-	"./nl": 348,
-	"./nl-be": 349,
-	"./nl-be.js": 349,
-	"./nl.js": 348,
-	"./nn": 350,
-	"./nn.js": 350,
-	"./pa-in": 351,
-	"./pa-in.js": 351,
-	"./pl": 352,
-	"./pl.js": 352,
-	"./pt": 353,
-	"./pt-br": 354,
-	"./pt-br.js": 354,
-	"./pt.js": 353,
-	"./ro": 355,
-	"./ro.js": 355,
-	"./ru": 356,
-	"./ru.js": 356,
-	"./sd": 357,
-	"./sd.js": 357,
-	"./se": 358,
-	"./se.js": 358,
-	"./si": 359,
-	"./si.js": 359,
-	"./sk": 360,
-	"./sk.js": 360,
-	"./sl": 361,
-	"./sl.js": 361,
-	"./sq": 362,
-	"./sq.js": 362,
-	"./sr": 363,
-	"./sr-cyrl": 364,
-	"./sr-cyrl.js": 364,
-	"./sr.js": 363,
-	"./ss": 365,
-	"./ss.js": 365,
-	"./sv": 366,
-	"./sv.js": 366,
-	"./sw": 367,
-	"./sw.js": 367,
-	"./ta": 368,
-	"./ta.js": 368,
-	"./te": 369,
-	"./te.js": 369,
-	"./tet": 370,
-	"./tet.js": 370,
-	"./th": 371,
-	"./th.js": 371,
-	"./tl-ph": 372,
-	"./tl-ph.js": 372,
-	"./tlh": 373,
-	"./tlh.js": 373,
-	"./tr": 374,
-	"./tr.js": 374,
-	"./tzl": 375,
-	"./tzl.js": 375,
-	"./tzm": 376,
-	"./tzm-latn": 377,
-	"./tzm-latn.js": 377,
-	"./tzm.js": 376,
-	"./uk": 378,
-	"./uk.js": 378,
-	"./ur": 379,
-	"./ur.js": 379,
-	"./uz": 380,
-	"./uz-latn": 381,
-	"./uz-latn.js": 381,
-	"./uz.js": 380,
-	"./vi": 382,
-	"./vi.js": 382,
-	"./x-pseudo": 383,
-	"./x-pseudo.js": 383,
-	"./yo": 384,
-	"./yo.js": 384,
-	"./zh-cn": 385,
-	"./zh-cn.js": 385,
-	"./zh-hk": 386,
-	"./zh-hk.js": 386,
-	"./zh-tw": 387,
-	"./zh-tw.js": 387
+	"./af": 271,
+	"./af.js": 271,
+	"./ar": 272,
+	"./ar-dz": 273,
+	"./ar-dz.js": 273,
+	"./ar-kw": 274,
+	"./ar-kw.js": 274,
+	"./ar-ly": 275,
+	"./ar-ly.js": 275,
+	"./ar-ma": 276,
+	"./ar-ma.js": 276,
+	"./ar-sa": 277,
+	"./ar-sa.js": 277,
+	"./ar-tn": 278,
+	"./ar-tn.js": 278,
+	"./ar.js": 272,
+	"./az": 279,
+	"./az.js": 279,
+	"./be": 280,
+	"./be.js": 280,
+	"./bg": 281,
+	"./bg.js": 281,
+	"./bn": 282,
+	"./bn.js": 282,
+	"./bo": 283,
+	"./bo.js": 283,
+	"./br": 284,
+	"./br.js": 284,
+	"./bs": 285,
+	"./bs.js": 285,
+	"./ca": 286,
+	"./ca.js": 286,
+	"./cs": 287,
+	"./cs.js": 287,
+	"./cv": 288,
+	"./cv.js": 288,
+	"./cy": 289,
+	"./cy.js": 289,
+	"./da": 290,
+	"./da.js": 290,
+	"./de": 291,
+	"./de-at": 292,
+	"./de-at.js": 292,
+	"./de-ch": 293,
+	"./de-ch.js": 293,
+	"./de.js": 291,
+	"./dv": 294,
+	"./dv.js": 294,
+	"./el": 295,
+	"./el.js": 295,
+	"./en-au": 296,
+	"./en-au.js": 296,
+	"./en-ca": 297,
+	"./en-ca.js": 297,
+	"./en-gb": 298,
+	"./en-gb.js": 298,
+	"./en-ie": 299,
+	"./en-ie.js": 299,
+	"./en-nz": 300,
+	"./en-nz.js": 300,
+	"./eo": 301,
+	"./eo.js": 301,
+	"./es": 302,
+	"./es-do": 303,
+	"./es-do.js": 303,
+	"./es.js": 302,
+	"./et": 304,
+	"./et.js": 304,
+	"./eu": 305,
+	"./eu.js": 305,
+	"./fa": 306,
+	"./fa.js": 306,
+	"./fi": 307,
+	"./fi.js": 307,
+	"./fo": 308,
+	"./fo.js": 308,
+	"./fr": 309,
+	"./fr-ca": 310,
+	"./fr-ca.js": 310,
+	"./fr-ch": 311,
+	"./fr-ch.js": 311,
+	"./fr.js": 309,
+	"./fy": 312,
+	"./fy.js": 312,
+	"./gd": 313,
+	"./gd.js": 313,
+	"./gl": 314,
+	"./gl.js": 314,
+	"./gom-latn": 315,
+	"./gom-latn.js": 315,
+	"./he": 316,
+	"./he.js": 316,
+	"./hi": 317,
+	"./hi.js": 317,
+	"./hr": 318,
+	"./hr.js": 318,
+	"./hu": 319,
+	"./hu.js": 319,
+	"./hy-am": 320,
+	"./hy-am.js": 320,
+	"./id": 321,
+	"./id.js": 321,
+	"./is": 322,
+	"./is.js": 322,
+	"./it": 323,
+	"./it.js": 323,
+	"./ja": 324,
+	"./ja.js": 324,
+	"./jv": 325,
+	"./jv.js": 325,
+	"./ka": 326,
+	"./ka.js": 326,
+	"./kk": 327,
+	"./kk.js": 327,
+	"./km": 328,
+	"./km.js": 328,
+	"./kn": 329,
+	"./kn.js": 329,
+	"./ko": 330,
+	"./ko.js": 330,
+	"./ky": 331,
+	"./ky.js": 331,
+	"./lb": 332,
+	"./lb.js": 332,
+	"./lo": 333,
+	"./lo.js": 333,
+	"./lt": 334,
+	"./lt.js": 334,
+	"./lv": 335,
+	"./lv.js": 335,
+	"./me": 336,
+	"./me.js": 336,
+	"./mi": 337,
+	"./mi.js": 337,
+	"./mk": 338,
+	"./mk.js": 338,
+	"./ml": 339,
+	"./ml.js": 339,
+	"./mr": 340,
+	"./mr.js": 340,
+	"./ms": 341,
+	"./ms-my": 342,
+	"./ms-my.js": 342,
+	"./ms.js": 341,
+	"./my": 343,
+	"./my.js": 343,
+	"./nb": 344,
+	"./nb.js": 344,
+	"./ne": 345,
+	"./ne.js": 345,
+	"./nl": 346,
+	"./nl-be": 347,
+	"./nl-be.js": 347,
+	"./nl.js": 346,
+	"./nn": 348,
+	"./nn.js": 348,
+	"./pa-in": 349,
+	"./pa-in.js": 349,
+	"./pl": 350,
+	"./pl.js": 350,
+	"./pt": 351,
+	"./pt-br": 352,
+	"./pt-br.js": 352,
+	"./pt.js": 351,
+	"./ro": 353,
+	"./ro.js": 353,
+	"./ru": 354,
+	"./ru.js": 354,
+	"./sd": 355,
+	"./sd.js": 355,
+	"./se": 356,
+	"./se.js": 356,
+	"./si": 357,
+	"./si.js": 357,
+	"./sk": 358,
+	"./sk.js": 358,
+	"./sl": 359,
+	"./sl.js": 359,
+	"./sq": 360,
+	"./sq.js": 360,
+	"./sr": 361,
+	"./sr-cyrl": 362,
+	"./sr-cyrl.js": 362,
+	"./sr.js": 361,
+	"./ss": 363,
+	"./ss.js": 363,
+	"./sv": 364,
+	"./sv.js": 364,
+	"./sw": 365,
+	"./sw.js": 365,
+	"./ta": 366,
+	"./ta.js": 366,
+	"./te": 367,
+	"./te.js": 367,
+	"./tet": 368,
+	"./tet.js": 368,
+	"./th": 369,
+	"./th.js": 369,
+	"./tl-ph": 370,
+	"./tl-ph.js": 370,
+	"./tlh": 371,
+	"./tlh.js": 371,
+	"./tr": 372,
+	"./tr.js": 372,
+	"./tzl": 373,
+	"./tzl.js": 373,
+	"./tzm": 374,
+	"./tzm-latn": 375,
+	"./tzm-latn.js": 375,
+	"./tzm.js": 374,
+	"./uk": 376,
+	"./uk.js": 376,
+	"./ur": 377,
+	"./ur.js": 377,
+	"./uz": 378,
+	"./uz-latn": 379,
+	"./uz-latn.js": 379,
+	"./uz.js": 378,
+	"./vi": 380,
+	"./vi.js": 380,
+	"./x-pseudo": 381,
+	"./x-pseudo.js": 381,
+	"./yo": 382,
+	"./yo.js": 382,
+	"./zh-cn": 383,
+	"./zh-cn.js": 383,
+	"./zh-hk": 384,
+	"./zh-hk.js": 384,
+	"./zh-tw": 385,
+	"./zh-tw.js": 385
 };
 function webpackContext(req) {
 	return __webpack_require__(webpackContextResolve(req));
@@ -977,11 +900,11 @@ webpackContext.keys = function webpackContextKeys() {
 };
 webpackContext.resolve = webpackContextResolve;
 module.exports = webpackContext;
-webpackContext.id = 522;
+webpackContext.id = 519;
 
 /***/ }),
 
-/***/ 523:
+/***/ 521:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1019,7 +942,125 @@ TimeOfDay = __decorate([
 
 //# sourceMappingURL=time.js.map
 
+/***/ }),
+
+/***/ 523:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SafeUrlPipe; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser__ = __webpack_require__(42);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+var SafeUrlPipe = (function () {
+    function SafeUrlPipe(domSanitizer) {
+        this.domSanitizer = domSanitizer;
+    }
+    SafeUrlPipe.prototype.transform = function (url) {
+        return this.domSanitizer.bypassSecurityTrustResourceUrl(url);
+    };
+    return SafeUrlPipe;
+}());
+SafeUrlPipe = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["W" /* Pipe */])({
+        name: 'safeUrl'
+    }),
+    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__angular_platform_browser__["c" /* DomSanitizer */]])
+], SafeUrlPipe);
+
+//# sourceMappingURL=safe-url.pipe.js.map
+
+/***/ }),
+
+/***/ 86:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return HomePage; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(27);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_contacts__ = __webpack_require__(231);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__phonecontactplan_phonecontactplan__ = __webpack_require__(233);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+var HomePage = (function () {
+    function HomePage(navCtrl, navParams, platform, contacts) {
+        var _this = this;
+        this.navCtrl = navCtrl;
+        this.navParams = navParams;
+        this.platform = platform;
+        this.contacts = contacts;
+        this.user = {};
+        this.user = navParams.get('user');
+        this.platform.ready().then(function () {
+            var options = {
+                filter: '',
+                multiple: true,
+                hasPhoneNumber: true,
+                desiredFields: ['name.formatted', 'phoneNumbers'],
+                fields: ['name.formatted', 'phoneNumbers']
+            };
+            contacts.find(['name'], options).then(function (contacts) {
+                //console.log(contacts);
+                _this.contactlist = contacts;
+            }, function (error) {
+                console.log(error);
+            });
+        });
+    }
+    HomePage.prototype.tapped = function (event, info) {
+        this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_3__phonecontactplan_phonecontactplan__["a" /* PhonecontactplanPage */], {
+            item: info,
+            user: this.user
+        });
+    };
+    return HomePage;
+}());
+HomePage = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
+        selector: 'page-home',template:/*ion-inline-start:"/Users/Durell/Desktop/Git Check/Green-Team/src/pages/home/home.html"*/'<ion-header>\n  <ion-navbar color="primary">\n    <ion-title>\n      Keep In Touch\n    </ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n  <ion-item>\n    <ion-label floating>Search:</ion-label>\n    <ion-textarea [(ngModel)]="query" name="query"></ion-textarea>\n  </ion-item>\n  <ion-list>\n    <button ion-item *ngFor="let contact of contactlist" (click)="tapped($event, contact)">\n      <div *ngIf="contact.name">\n          {{contact.name.formatted}} \n      </div>\n    </button>\n  </ion-list>\n</ion-content>'/*ion-inline-end:"/Users/Durell/Desktop/Git Check/Green-Team/src/pages/home/home.html"*/
+    }),
+    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavParams */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* Platform */], __WEBPACK_IMPORTED_MODULE_2__ionic_native_contacts__["a" /* Contacts */]])
+], HomePage);
+
+/*
+      this.contactlist.sort(function(a, b){
+            var nameA = a.displayName;
+            var nameB = b.displayName;
+        
+            if (nameA < nameB){ //sort string ascending
+                return -1;
+            }
+            if (nameA > nameB){
+                return 1;
+            }
+            return 0 //default return value (no sorting)
+        });
+        */ 
+//# sourceMappingURL=home.js.map
+
 /***/ })
 
-},[393]);
+},[392]);
 //# sourceMappingURL=main.js.map
