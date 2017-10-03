@@ -61,7 +61,7 @@ export class ContactPage {
       public navParams: NavParams,
       public alertCtrl: AlertController,
       public actionSheetCtrl: ActionSheetController,
-      public db: AngularFireDatabase, afAuth: AngularFireAuth) {
+      public db: AngularFireDatabase) {
     
     this.user = navParams.get('user');
     this.contacts = db.list('/contacts');   //this sets the db data to the variable within the view
@@ -70,10 +70,15 @@ export class ContactPage {
   
   filterContactsByUser(contacts, filteredList) {
     var filterUser = this.user;
+    if (filterUser == undefined)
+      return;
+
+    filteredList.length = 0;
     contacts.forEach(c => {
-      console.log(c.username);
-      if (c.username == filterUser.username)
+      if (c.username == filterUser.username) {
         filteredList.push(c);
+        console.log(filteredList);
+      }
     });
   }
 
