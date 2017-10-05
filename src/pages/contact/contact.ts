@@ -25,12 +25,14 @@ export class ContactPage {
   contacts: FirebaseListObservable<any>; //the array that is stored on the firebase database
   todaycontacts: any; //: FirebaseListObservable<any>;
   latercontacts: any; //: FirebaseListObservable<any>;
+  laterchunks: any;
   openedContact: any;
   user = {} as User;
 
   ngOnInit() {
     this.todaycontacts = [];
     this.latercontacts = [];
+    this.laterchunks = [];
 
     var dayBegin = new Date();
     dayBegin.setHours(0,0,0,0);
@@ -54,6 +56,7 @@ export class ContactPage {
       }
     }).subscribe(contacts => {
       this.filterContactsByUser(contacts, this.latercontacts);
+      this.chunkContacts(this.latercontacts, this.laterchunks);
     });
   }
 
@@ -82,9 +85,28 @@ export class ContactPage {
     contacts.forEach(c => {
       if (c.username == filterUser.username) {
         filteredList.push(c);
-        console.log(filteredList);
       }
     });
+  }
+
+  chunkContacts(contacts, chunks) {
+    if (contacts.length == 0) return;
+
+    chunks.push([contacts[0]]);
+    var chunkIndex = 0;
+    var endTime: any = moment(chunks[0].daytime).startOf('day').add(1, 'd').toDate();
+    for (var i = 0; i < contacts.length; i++) {
+      var cDate: any = new Date(contacts[i].daytime);
+      console.log(endTime);
+      console.log(cDate);
+      if ((cDate - endTime) > 0) {
+        endTime = moment(cDate).startOf('day').add(1, 'd').toDate();
+        chunks.push([contacts[i]]);
+        chunkIndex++;
+      } else {
+        chunks[chunkIndex].push(contacts[i]);
+      }
+    }
   }
 
   choosePlan(){

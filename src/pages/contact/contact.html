@@ -29,73 +29,77 @@
 
           <div>{{contact.daytime | timeOfDay}}, {{contact.repeat}}</div>
 
-
           <button ion-button icon-only item-end small (click)="repeatContact(contact.$key, contact.daytime, contact.repeat)">
-        <ion-icon name="md-checkmark"></ion-icon>
-      </button>
+            <ion-icon name="md-checkmark"></ion-icon>
+          </button>
 
           <button ion-button icon-only item-end small (click)="showOptions(contact.$key, contact.name)">
-        <ion-icon name="more"></ion-icon>
-      </button>
+            <ion-icon name="more"></ion-icon>
+          </button>
         </ion-item>
 
         <div *ngIf="openedContact == contact.$key">
           <a *ngIf="contact.phoneNumbers" href="tel:{{contact.phoneNumbers[0].value}}" (click)="callThem(contact.phoneNumbers[0].value)">
-        <button ion-button icon-only item-start outline small color="secondary">
-          <ion-icon name="call"> </ion-icon>
-        </button>
-      </a>
+            <button ion-button icon-only item-start outline small color="secondary">
+              <ion-icon name="call"> </ion-icon>
+            </button>
+          </a>
+          
           <a *ngIf="contact.phoneNumbers" [attr.href]="'sms:'+contact.phoneNumbers[0].value | safeUrl" (click)="callThem(contact.phoneNumbers[0].value)">
-          <button ion-button icon-only item-start outline small color="secondary">
-            <ion-icon name="text"> </ion-icon>
-          </button>
-        </a>
-          <div *ngIf="!contact.phoneNumbers">
-            <ion-item>No Contact Methods Provided</ion-item>
-          </div>
-        </div>
+            <button ion-button icon-only item-start outline small color="secondary">
+              <ion-icon name="text"> </ion-icon>
+            </button>
+          </a>
 
-      </div>
-    </ion-list>
-
-    <h4>Later</h4>
-    <ion-list *ngIf="latercontacts.length > 0" class="accordion-list">
-      <div *ngFor="let contact of latercontacts; let i = index">
-        <ion-item (click)="toggleContactHolder(contact.$key)" [ngClass]="{'section-active': openedContact == contact.$key, 'section': openedContact == contact.$key}">
-
-          <div>{{contact.name}}</div>
-
-          <div class="darkgrey" *ngIf="contact.description">
-            {{contact.description}}
-          </div>
-
-          <div>{{contact.daytime | timeOfDay:['day']}}, {{contact.repeat}}</div>
-
-          <button ion-button icon-only item-end small (click)="repeatContact(contact.$key, contact.daytime, contact.repeat)">
-          <ion-icon name="md-checkmark"></ion-icon>
-      </button>
-
-          <button ion-button icon-only item-end small (click)="showOptions(contact.$key, contact.name)">
-          <ion-icon name="more"></ion-icon>
-      </button>
-        </ion-item>
-
-        <div *ngIf="openedContact == contact.$key">
-          <a *ngIf="contact.phoneNumbers" href="tel:{{contact.phoneNumbers[0].value}}" (click)="callThem(contact.phoneNumbers[0].value)">
-        <button ion-button icon-only item-start outline small color="secondary">
-          <ion-icon name="call"> </ion-icon>
-        </button>
-      </a>
-          <a *ngIf="contact.phoneNumbers" href="sms:{{contact.phoneNumbers[0].value}}" (click)="callThem(contact.phoneNumbers[0].value)">
-          <button ion-button icon-only item-start outline small color="secondary">
-            <ion-icon name="text"> </ion-icon>
-          </button>
-        </a>
           <div *ngIf="!contact.phoneNumbers">
             <ion-item>No Contact Methods Provided</ion-item>
           </div>
         </div>
       </div>
     </ion-list>
+
+    <div *ngIf="latercontacts.length > 0" class="accordion-list">
+      <ion-list *ngFor="let chunk of laterchunks; let i = index">
+        <h4>{{ chunk[0].daytime | timeOfDay:['day'] }}</h4>
+        <div *ngFor="let contact of chunk;">
+          <ion-item (click)="toggleContactHolder(contact.$key)" [ngClass]="{'section-active': openedContact == contact.$key, 'section': openedContact == contact.$key}">
+
+            <div>{{contact.name}}</div>
+
+            <div class="darkgrey" *ngIf="contact.description">
+              {{contact.description}}
+            </div>
+
+            <div>{{contact.daytime | timeOfDay:['day']}}, {{contact.repeat}}</div>
+
+            <button ion-button icon-only item-end small (click)="repeatContact(contact.$key, contact.daytime, contact.repeat)">
+              <ion-icon name="md-checkmark"></ion-icon>
+            </button>
+
+            <button ion-button icon-only item-end small (click)="showOptions(contact.$key, contact.name)">
+              <ion-icon name="more"></ion-icon>
+            </button>
+          </ion-item>
+
+          <div *ngIf="openedContact == contact.$key">
+            <a *ngIf="contact.phoneNumbers" href="tel:{{contact.phoneNumbers[0].value}}" (click)="callThem(contact.phoneNumbers[0].value)">
+              <button ion-button icon-only item-start outline small color="secondary">
+                <ion-icon name="call"> </ion-icon>
+              </button>
+            </a>
+            
+            <a *ngIf="contact.phoneNumbers" [attr.href]="'sms:'+contact.phoneNumbers[0].value | safeUrl" (click)="callThem(contact.phoneNumbers[0].value)">
+              <button ion-button icon-only item-start outline small color="secondary">
+                <ion-icon name="text"> </ion-icon>
+              </button>
+            </a>
+            
+            <div *ngIf="!contact.phoneNumbers">
+              <ion-item>No Contact Methods Provided</ion-item>
+            </div>
+          </div>
+        </div>
+      </ion-list>
+    </div>
   </div>
 </ion-content>
