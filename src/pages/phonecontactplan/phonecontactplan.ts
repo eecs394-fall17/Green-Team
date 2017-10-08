@@ -1,8 +1,8 @@
 
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams, AlertController, Platform} from 'ionic-angular';
 
-
+import { LocalNotifications } from '@ionic-native/local-notifications';
 
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 import { AngularFireAuthModule, AngularFireAuth } from 'angularfire2/auth';
@@ -30,7 +30,7 @@ export class PhonecontactplanPage {
     "Once"
   ];
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, db: AngularFireDatabase) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, db: AngularFireDatabase, private plt: Platform, private localNotifications: LocalNotifications, alertCtrl: AlertController) {
     this.contacts = db.list('/contacts'); //setting up database
     this.phoneContact = navParams.get('item'); //getting the object from the the previous page
     
@@ -45,13 +45,38 @@ export class PhonecontactplanPage {
     this.user = navParams.get('user');
     console.log(this.user);
     this.contact.username = this.user.username;
+
+    /********************************** */
+    this.plt.ready().then((readySource) => {
+      this.localNotifications.on('click', (notification, state) => {
+        let json = JSON.parse(notification.data);
+        let alert = alertCtrl.create({
+          title: notification.title,
+          subTitle: json.mydata
+        });
+        alert.present();
+      })
+    });
+    
+     /********************************** */
+  }
+
+  scheduleNotification(contact) {
+    this.localNotifications.schedule({
+      id: 1,
+      title: 'Keep in Touch',
+      text: `You should contact ${this.contact.name}`,
+      data: { mydata: 'My hidden message this is' },
+      at: this.contact.daytime
+    });
   }
 
   logForm() {
     console.log(this.contact);
     //pushing the newly created contact from the form to the db
+    this.scheduleNotification(this.contact);
     this.contacts.push(this.contact); 
-    //going back to the root page
-    this.navCtrl.popToRoot(); 
+    //going back to the previous page
+    this.navCtrl.popToRoot();
   }
 }

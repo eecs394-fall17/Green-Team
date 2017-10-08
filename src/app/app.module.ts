@@ -5,6 +5,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { Platform, MenuController, Nav } from 'ionic-angular';
 import { Contacts } from '@ionic-native/contacts';
+import { LocalNotifications } from '@ionic-native/local-notifications';
 import { MyApp } from './app.component';
 
 /*PAGES*/
@@ -66,6 +67,7 @@ export const firebaseConfig = {
     StatusBar,
     SplashScreen,
     Contacts,
+    LocalNotifications,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })
