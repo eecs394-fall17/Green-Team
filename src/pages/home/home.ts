@@ -32,7 +32,6 @@ export class HomePage {
   }
 
   tapped(event, info) {
-
     this.navCtrl.push(PhonecontactplanPage, {
       item: info,
       user: this.user

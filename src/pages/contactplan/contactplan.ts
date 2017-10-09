@@ -22,7 +22,7 @@ export class ContactplanPage {
   user = {} as User;
 
   contact = {} as Contact;
-  contacts: FirebaseListObservable<any>; // We'll change any to Contact
+  contacts: FirebaseListObservable<any>;
 
   repeats = [
     "Daily",
@@ -44,9 +44,9 @@ export class ContactplanPage {
 
   logForm() {
     console.log(this.contact);
-    //pushing the newly created contact from the form to the db
+    // Pushing new contact to query list adds it to the database
     this.contacts.push(this.contact); 
-    //going back to the previous page
+    // Pop all pages on stack and navigate to root page
     this.navCtrl.popToRoot();
   }
 }

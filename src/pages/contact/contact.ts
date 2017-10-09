@@ -11,7 +11,7 @@ import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/databa
 import { AlertController } from 'ionic-angular';
 import { ActionSheetController } from 'ionic-angular';
 
- 
+
 
 
 import * as moment from 'moment';
@@ -22,13 +22,20 @@ import * as moment from 'moment';
 })
 
 export class ContactPage {
-  contacts: FirebaseListObservable<any>; //the array that is stored on the firebase database
+  // Firebase list of all contacts
+  contacts: FirebaseListObservable<any>;
+  // Firebase list of contacts for current day 
   todaycontacts: any; //: FirebaseListObservable<any>;
+  // Firebase list of contacts for future days
   latercontacts: any; //: FirebaseListObservable<any>;
+  // Javascript array of contact indices grouped in time chunks 
   laterchunks: any;
+  // Tracks accordion unfolded contact
   openedContact: any;
+  // Tracks current logged-in user
   user = {} as User;
 
+  // Queries Firebase for contact lists above
   ngOnInit() {
     this.todaycontacts = [];
     this.latercontacts = [];
@@ -46,6 +53,7 @@ export class ContactPage {
         endAt: dayEnd.toISOString()
       }
     }).subscribe(contacts => {
+      // Callbacks to fire to populate today contacts
       this.filterContactsByUser(contacts, this.todaycontacts);
     });
 
@@ -55,6 +63,7 @@ export class ContactPage {
         startAt: dayEnd.toISOString()
       }
     }).subscribe(contacts => {
+      // Callbacks to fire to populate later contacts + chunks
       this.filterContactsByUser(contacts, this.latercontacts);
       this.chunkContacts(this.latercontacts, this.laterchunks);
     });
@@ -66,16 +75,16 @@ export class ContactPage {
       public actionSheetCtrl: ActionSheetController,
       public db: AngularFireDatabase) {
     
+    // Grab logged-in user passed from previous page
     this.user = navParams.get('user');
-    console.log(this.user);
     
-    this.contacts = db.list('/contacts');   //this sets the db data to the variable within the view
+    // Firebase query to grab ALL users
+    this.contacts = db.list('/contacts');
+    // Default to no open contact in accordion
     this.openedContact = undefined;
-    console.log(this.todaycontacts);
-    console.log(this.latercontacts);
-    
   } 
   
+  // Filter Firebase contact query list for the logged-in user 
   filterContactsByUser(contacts, filteredList) {
     var filterUser = this.user;
     if (filterUser == undefined)
@@ -89,6 +98,7 @@ export class ContactPage {
     });
   }
 
+  // Create contact index array to group contacts in time chunks
   chunkContacts(contacts, chunks) {
     if (contacts.length == 0) return;
 
@@ -109,6 +119,7 @@ export class ContactPage {
     }
   }
 
+  // Alert to choose whether new contact uses phone info or not
   choosePlan(){
     let actionSheet = this.actionSheetCtrl.create({
       title: 'Create a New Contact Plan',

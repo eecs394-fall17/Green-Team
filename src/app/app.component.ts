@@ -12,8 +12,11 @@ import { SplashScreen } from '@ionic-native/splash-screen';
   templateUrl: 'app.html'
 })
 export class MyApp {
+  // The page loaded on startup
   rootPage:any = SigninPage;
+  // Collection of pages used in left-hand menu
   pages: Array<{title: string, component: any}>;
+  // Navigation component: stack of pages user accesses
   @ViewChild(Nav) nav: Nav;
 
   constructor(
@@ -23,7 +26,7 @@ export class MyApp {
     public splashScreen: SplashScreen) {
     this.initializeApp();
 
-    // set our app's pages
+    // Spawn the order of pages on left-hand menu
     this.pages = [
       { title: 'Contacts', component: ContactPage },
       { title: 'Sign In', component: SigninPage }
@@ -39,10 +42,11 @@ export class MyApp {
     });
   }
 
+  // Callback from selecting page on left-hand menu
   openPage(page) {
-    // close the menu when clicking a link from the menu
+    // Close the left-hand menu
     this.menu.close();
-    // navigate to the new page if it is not the current page
+    // Navigate to new page by resetting stack with this page
     this.nav.setRoot(page.component);
   }
 
