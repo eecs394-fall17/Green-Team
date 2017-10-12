@@ -24,6 +24,10 @@ import * as moment from 'moment';
 export class ContactPage {
   // Firebase list of all contacts
   contacts: FirebaseListObservable<any>;
+  // Name contact sorted
+  sortname = false;
+  namecontacts: any;
+
   // Firebase list of contacts for current day 
   todaycontacts: any; //: FirebaseListObservable<any>;
   // Firebase list of contacts for future days
@@ -38,6 +42,7 @@ export class ContactPage {
   // Queries Firebase for contact lists above
   ngOnInit() {
     this.todaycontacts = [];
+    this.namecontacts = [];
     this.latercontacts = [];
     this.laterchunks = [];
 
@@ -66,6 +71,14 @@ export class ContactPage {
       // Callbacks to fire to populate later contacts + chunks
       this.filterContactsByUser(contacts, this.latercontacts);
       this.chunkContacts(this.latercontacts, this.laterchunks);
+    });
+
+    this.db.list('contacts',{
+      query: {
+        orderByChild: 'name', 
+      }
+    }).subscribe(contacts => {
+      this.filterContactsByUser(contacts, this.namecontacts);
     });
   }
 
@@ -244,4 +257,10 @@ export class ContactPage {
       this.openedContact = undefined;
     }
   }
+
+  toggleSort(sortByName) {
+    this.sortname = sortByName;
+    console.log(sortByName);
+  }
+  
 }

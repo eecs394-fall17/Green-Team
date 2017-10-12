@@ -15,7 +15,8 @@
 </ion-header>
 
 <ion-content padding>
-  <div>
+
+  <div *ngIf="sortname == false" >
     <h4>Today</h4>
     <ion-list *ngIf="todaycontacts.length > 0" class="accordion-list">
       <div *ngFor="let contact of todaycontacts; let i = index">
@@ -102,4 +103,56 @@
       </ion-list>
     </div>
   </div>
+
+  <div *ngIf="sortname == true" >
+      <h4>Sorted by name:</h4>
+      <ion-list *ngIf="namecontacts.length > 0" class="accordion-list">
+        <div *ngFor="let contact of namecontacts; let i = index">
+          <ion-item (click)="toggleContactHolder(contact.$key)" [ngClass]="{'section-active': openedContact == contact.$key, 'section': openedContact == contact.$key}">
+  
+            <div>{{contact.name}}</div>
+  
+            <div class="darkgrey" *ngIf="contact.description">
+              {{contact.description}}
+            </div>
+  
+            <div>{{contact.daytime | timeOfDay}}, {{contact.repeat}}</div>
+  
+            <button ion-button icon-only item-end small (click)="repeatContact(contact.$key, contact.daytime, contact.repeat)">
+              <ion-icon name="md-checkmark"></ion-icon>
+            </button>
+  
+            <button ion-button icon-only item-end small (click)="showOptions(contact.$key, contact.name)">
+              <ion-icon name="more"></ion-icon>
+            </button>
+          </ion-item>
+  
+          <div *ngIf="openedContact == contact.$key">
+            <a *ngIf="contact.phoneNumbers" href="tel:{{contact.phoneNumbers[0].value}}" (click)="callThem(contact.phoneNumbers[0].value)">
+              <button ion-button icon-only item-start outline small color="secondary">
+                <ion-icon name="call"> </ion-icon>
+              </button>
+            </a>
+            
+            <a *ngIf="contact.phoneNumbers" [attr.href]="'sms:'+contact.phoneNumbers[0].value | safeUrl" (click)="callThem(contact.phoneNumbers[0].value)">
+              <button ion-button icon-only item-start outline small color="secondary">
+                <ion-icon name="text"> </ion-icon>
+              </button>
+            </a>
+  
+            <div *ngIf="!contact.phoneNumbers">
+              <ion-item>No Contact Methods Provided</ion-item>
+            </div>
+          </div>
+        </div>
+      </ion-list>
+    </div>
+  
 </ion-content>
+
+<ion-footer>
+  <button ion-button style="width: 45%;" float-left (click)="toggleSort(true)">A-Z
+  </button>
+  <button ion-button style="width: 45%;" float-right (click)="toggleSort(false)">Time
+    </button>
+</ion-footer>
