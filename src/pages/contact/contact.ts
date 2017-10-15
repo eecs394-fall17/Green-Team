@@ -156,15 +156,19 @@ export class ContactPage {
     console.log(number);
   }
 
-  showOptions(contactId, contactTitle) {
+  showOptions(contactId, contactInfo) {
     console.log("showOptions called");
     let actionSheet = this.actionSheetCtrl.create({
       title: 'What do you want to do?',
       buttons: [
         {
           text: 'Update Contact Plan',
-          handler: () => {
-            this.updateContact(contactId, contactTitle);
+          handler: () => {           
+            this.navCtrl.push(ContactplanPage, {
+              user: this.user,
+              contactKey: contactId,
+              contactInfo: contactInfo,
+            });
           }
         },
         {
@@ -184,37 +188,6 @@ export class ContactPage {
       ]
     });
     actionSheet.present();
-  }
-  
-  updateContact(contactId, contactTitle){
-    let prompt = this.alertCtrl.create({
-      title: 'Contact Name',
-      message: "Update the name for this contact",
-      inputs: [
-        {
-          name: 'title',
-          placeholder: 'Title',
-          value: contactTitle
-        },
-      ],
-      buttons: [
-        {
-          text: 'Cancel',
-          handler: data => {
-            console.log('Cancel clicked');
-          }
-        },
-        {
-          text: 'Save',
-          handler: data => {
-            this.contacts.update(contactId, {
-              title: data.title
-            });
-          }
-        }
-      ]
-    });
-    prompt.present();
   }
 
   repeatContact(contactId: string, time, rep) {
