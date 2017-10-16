@@ -26,6 +26,7 @@ export class ContactPage {
   contacts: FirebaseListObservable<any>;
   // Name contact sorted
   sortname = false;
+  sortlabel = "Time";
   namecontacts: any;
 
   // Firebase list of contacts for current day 
@@ -259,8 +260,11 @@ export class ContactPage {
   }
 
   toggleSort(sortByName) {
-    this.sortname = sortByName;
-    console.log(sortByName);
+    if (this.sortname) {
+      this.sortlabel = "A-Z";
+    } else {
+      this.sortlabel = "Time";
+    }
   }
   
 }
