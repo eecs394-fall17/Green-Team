@@ -59,8 +59,15 @@
       </div>
     </ion-list>
 
-    <div *ngIf="latercontacts.length > 0" class="accordion-list">
-      <ion-list *ngFor="let chunk of laterchunks; let i = index">
+    <div class="accordion-list">
+            
+      <h4>Later</h4>
+
+      <div *ngIf="latercontacts.length == 0" class="accordion-list">
+              You have no records in this category
+      </div>
+
+      <ion-list *ngFor="let chunk of latercontacts; let i = index"> <!-- laterchunks for latercontacts --> 
         <h4>{{ chunk[0].daytime | timeOfDay:['day'] }}</h4>
         <div *ngFor="let contact of chunk;">
           <ion-item (click)="toggleContactHolder(contact.$key)" [ngClass]="{'section-active': openedContact == contact.$key, 'section': openedContact == contact.$key}">
@@ -157,7 +164,7 @@
     <ion-col col-4>
     </ion-col>
     <ion-col col-2>
-      <ion-label>Time</ion-label>
+      <ion-label>Time {{nextcontact.daytime}}</ion-label>
     </ion-col>
     <ion-col col-4>
       <ion-item>

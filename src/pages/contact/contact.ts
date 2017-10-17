@@ -29,6 +29,8 @@ export class ContactPage {
   sortlabel = "Time";
   namecontacts: any;
 
+  //get the closest contact to call
+  nextcontact: any;
   // Firebase list of contacts for current day 
   todaycontacts: any; //: FirebaseListObservable<any>;
   // Firebase list of contacts for future days
@@ -46,6 +48,7 @@ export class ContactPage {
     this.namecontacts = [];
     this.latercontacts = [];
     this.laterchunks = [];
+    this.nextcontact = []; //next call
 
     var dayBegin = new Date();
     dayBegin.setHours(0,0,0,0);
@@ -80,6 +83,17 @@ export class ContactPage {
       }
     }).subscribe(contacts => {
       this.filterContactsByUser(contacts, this.namecontacts);
+    });
+
+    this.db.list('contacts', {
+      query: {
+        orderByChild: 'daytime',
+        startAt: dayBegin.toISOString(),
+        endAt: dayEnd.toISOString()
+      }
+    }).subscribe(contacts => {
+      // Callbacks to fire to populate today contacts
+      this.filterContactsByUser(contacts, this.nextcontact);
     });
   }
 
