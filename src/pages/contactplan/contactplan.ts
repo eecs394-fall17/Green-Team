@@ -1,10 +1,11 @@
 
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams, AlertController, Platform } from 'ionic-angular';
 
 
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 import { AngularFireAuthModule, AngularFireAuth } from 'angularfire2/auth';
+import { LocalNotifications } from '@ionic-native/local-notifications';
 
 import { Contact } from '../../models/contact.interface';
 import { User } from '../../models/user.interface';
@@ -36,13 +37,14 @@ export class ContactplanPage {
     "Once"
   ];
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, db: AngularFireDatabase) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, db: AngularFireDatabase, private plt: Platform, private localNotifications: LocalNotifications, alertCtrl: AlertController) {
     this.contacts = db.list('/contacts');
 
     this.user = navParams.get('user');
     this.contactKey = navParams.get('contactKey');
     this.contactInfo = navParams.get('contactInfo');
 
+    console.log(this.contactKey);
     if (this.contactKey != undefined) {
       console.log(this.contactInfo);
       this.contact.name = this.contactInfo.name;
@@ -50,25 +52,36 @@ export class ContactplanPage {
       this.contact.repeat = this.contactInfo.repeat;
       this.contact.daytime = this.contactInfo.daytime;
     } else {
-      this.contact.username = this.user.username;
-      //this.contact.name
-      //this.contact.description
       this.contact.repeat = this.repeats[1];
       this.contact.daytime = (new Date()).toISOString();
     }
+    this.contact.username = this.user.username;
+  }
+  
+  
+  scheduleNotification(contact) {
+    this.localNotifications.schedule({
+      id: 1,
+      title: 'Keep in Touch',
+      text: `You should contact ${this.contact.name}`,
+      data: { mydata: 'My hidden message this is' },
+      at: this.contact.daytime
+    });
   }
 
   logForm() {
-    console.log(this.contact);
     // Pushing new contact to query list adds it to the database
-    if (this.contactKey == undefined)
-      this.contacts.push(this.contact); 
-    else {
+    if (this.contactKey == undefined) {
+      this.contacts.push(this.contact);
+      // Pop all pages on stack and navigate to root page
+      this.scheduleNotification(this.contact);
+    } else {
+      // NEED TO UPDATE NOTIFICATION IF TIME WAS UPDATED
       // To remove undefined attributes on contact JSON:
       this.contact = JSON.parse(JSON.stringify(this.contact));
       this.contacts.update(this.contactKey, this.contact);
     }
-    // Pop all pages on stack and navigate to root page
+    // Go back to the previous page
     this.navCtrl.popToRoot();
   }
 }

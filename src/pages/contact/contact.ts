@@ -90,7 +90,7 @@ export class ContactPage {
     if (filterUser == undefined)
       return;
 
-    filteredList.length = 0;
+    filteredList.splice(0,filteredList.length);
     contacts.forEach(c => {
       if (c.username == filterUser.username) {
         filteredList.push(c);
@@ -100,15 +100,16 @@ export class ContactPage {
 
   // Create contact index array to group contacts in time chunks
   chunkContacts(contacts, chunks) {
+    chunks.splice(0,chunks.length);
     if (contacts.length == 0) return;
 
     chunks.push([contacts[0]]);
     var chunkIndex = 0;
     var endTime: any = moment(chunks[0].daytime).startOf('day').add(1, 'd').toDate();
-    for (var i = 0; i < contacts.length; i++) {
+    for (var i = 1; i < contacts.length; i++) {
       var cDate: any = new Date(contacts[i].daytime);
-      console.log(endTime);
-      console.log(cDate);
+      //console.log(endTime);
+      //console.log(cDate);
       if ((cDate - endTime) > 0) {
         endTime = moment(cDate).startOf('day').add(1, 'd').toDate();
         chunks.push([contacts[i]]);
