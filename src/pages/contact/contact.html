@@ -16,8 +16,8 @@
 
 <ion-content padding>
   <div>
-    <h4>Today</h4>
-    <ion-list *ngIf="todaycontacts.length > 0" class="accordion-list">
+    <h4 *ngIf="todaycontacts.length > 0">Today</h4>
+    <ion-list  class="accordion-list">
       <div *ngFor="let contact of todaycontacts; let i = index">
         <ion-item (click)="toggleContactHolder(contact.$key)" [ngClass]="{'section-active': openedContact == contact.$key, 'section': openedContact == contact.$key}">
 
@@ -93,13 +93,13 @@
                 <ion-icon name="text"> </ion-icon>
               </button>
             </a>
-            
-            <div *ngIf="!contact.phoneNumbers">
-              <ion-item>No Contact Methods Provided</ion-item>
-            </div>
           </div>
         </div>
       </ion-list>
     </div>
+  </div>
+  <div *ngIf="todaycontacts.length == 0 && latercontacts.length == 0">
+    <p>No Contacts</p>
+    <button ion-button block (click)="choosePlan()">Add A Contact</button>
   </div>
 </ion-content>

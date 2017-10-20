@@ -12,7 +12,7 @@
   <form (ngSubmit)="logForm()">       
     <ion-item>
       <ion-label floating >Contact Name:</ion-label> 
-      <ion-input type="text" [(ngModel)]="contact.name" name="name"></ion-input>
+      <ion-input type="text" [(ngModel)]="contact.name" name="name" required></ion-input>
     </ion-item> 
 
     <ion-item>
@@ -36,12 +36,12 @@
       <ion-label floating >Start Time</ion-label>
       <ion-datetime displayFormat="h:mm A" pickerFormat="h mm A" [(ngModel)]="contact.daytime" [ngModelOptions]="{standalone: true}"></ion-datetime>
     </ion-item>
+    
     <button ion-button type="submit" block>Add Contact Plan</button>
   </form>
 
-
-  <button ion-button block (click)="scheduleNotification()">Schedule Notification</button>
-
+  <!--<button ion-button block (click)="checkData(contact)">Check data</button>-->
 
 
-</ion-content>
+
+</ion-content> 

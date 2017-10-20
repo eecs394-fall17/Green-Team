@@ -95,7 +95,7 @@ export class ContactPage {
     chunks.push([contacts[0]]);
     var chunkIndex = 0;
     var endTime: any = moment(chunks[0].daytime).startOf('day').add(1, 'd').toDate();
-    for (var i = 0; i < contacts.length; i++) {
+    for (var i = 1; i < contacts.length; i++) {
       var cDate: any = new Date(contacts[i].daytime);
       console.log(endTime);
       console.log(cDate);
