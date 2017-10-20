@@ -1,10 +1,9 @@
-
 import { Component } from '@angular/core';
 import { NavController, NavParams, AlertController, Platform } from 'ionic-angular';
 
 
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
-import { AngularFireAuthModule, AngularFireAuth } from 'angularfire2/auth';
+//import { AngularFireAuthModule, AngularFireAuth } from 'angularfire2/auth';
 import { LocalNotifications } from '@ionic-native/local-notifications';
 
 import { Contact } from '../../models/contact.interface';
@@ -57,18 +56,27 @@ export class ContactplanPage {
     }
     this.contact.username = this.user.username;
   }
-  
-  
+
   scheduleNotification(contact) {
     this.localNotifications.schedule({
       id: 1,
-      title: 'Keep in Touch',
-      text: `You should contact ${this.contact.name}`,
+      title: `You should contact ${this.contact.name}`,
+      text: `Note: ${this.contact.description}`,
       data: { mydata: 'My hidden message this is' },
-      at: this.contact.daytime
+      at: (new Date(this.contact.daytime))
     });
   }
-
+  /*
+  checkData(contact){
+    console.log("contact is: " + contact);
+    console.log("This.contact is: " + this.contact);
+    console.log("This is the date " + contact.daytime);
+    
+    console.log("This is the date as something else: " + (new Date(contact.daytime)));
+    
+    console.log(this.localNotifications.getAll());
+  }
+  */
   logForm() {
     // Pushing new contact to query list adds it to the database
     if (this.contactKey == undefined) {

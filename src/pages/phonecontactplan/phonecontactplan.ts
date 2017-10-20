@@ -38,7 +38,7 @@ export class PhonecontactplanPage {
     
     this.contact.name = this.phoneContact.name.formatted; //setting name from phone to this contact's info
     this.contact.phoneNumbers = this.phoneContact.phoneNumbers; //this is an array
-    
+    this.contact.description = " ";
     this.contact.repeat = this.repeats[1]; //making it automatically be weekly
     this.contact.daytime = (new Date()).toISOString();
     
@@ -48,14 +48,7 @@ export class PhonecontactplanPage {
 
     /********************************** */
     this.plt.ready().then((readySource) => {
-      this.localNotifications.on('click', (notification, state) => {
-        let json = JSON.parse(notification.data);
-        let alert = alertCtrl.create({
-          title: notification.title,
-          subTitle: json.mydata
-        });
-        alert.present();
-      })
+      
     });
     
      /********************************** */
@@ -64,15 +57,16 @@ export class PhonecontactplanPage {
   scheduleNotification(contact) {
     this.localNotifications.schedule({
       id: 1,
-      title: 'Keep in Touch',
-      text: `You should contact ${this.contact.name}`,
+      title: `You should contact ${this.contact.name}`,
+      text: `Note: ${this.contact.description}`,
       data: { mydata: 'My hidden message this is' },
-      at: this.contact.daytime
+      at: (new Date(this.contact.daytime))
     });
   }
 
   logForm() {
     console.log(this.contact);
+  
     //pushing the newly created contact from the form to the db
     this.scheduleNotification(this.contact);
     this.contacts.push(this.contact); 
