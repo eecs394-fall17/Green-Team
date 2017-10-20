@@ -28,7 +28,7 @@
             {{contact.description}}
           </div>
 
-          <div>{{contact.daytime | timeOfDay}}, {{contact.repeat}}</div>
+          <div>{{contact.daytime | date:'shortTime'}}, {{contact.repeat}}</div>
 
           <button ion-button icon-only item-end small (click)="repeatContact(contact.$key, contact.daytime, contact.repeat)">
             <ion-icon name="md-checkmark"></ion-icon>
@@ -122,8 +122,8 @@
             <div class="darkgrey" *ngIf="contact.description">
               {{contact.description}}
             </div>
-  
-            <div>{{contact.daytime | timeOfDay}}, {{contact.repeat}}</div>
+            
+            <div>{{contact.daytime | date:'shortTime'}}, {{contact.repeat}}</div>
   
             <button ion-button icon-only item-end small (click)="repeatContact(contact.$key, contact.daytime, contact.repeat)">
               <ion-icon name="md-checkmark"></ion-icon>
@@ -164,7 +164,10 @@
     <ion-col col-4>
     </ion-col>
     <ion-col col-2>
-      <ion-label>Time {{nextcontact.daytime}}</ion-label>
+      <ion-label>{{nextcontact}}
+          <div *ngIf="sortname == true" >Name</div>
+          <div *ngIf="sortname == false" >Time</div>
+          </ion-label>
     </ion-col>
     <ion-col col-4>
       <ion-item>

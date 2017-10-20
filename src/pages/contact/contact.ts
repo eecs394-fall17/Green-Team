@@ -12,7 +12,7 @@ import { AlertController } from 'ionic-angular';
 import { ActionSheetController } from 'ionic-angular';
 
 
-
+ 
 
 import * as moment from 'moment';
  
@@ -65,7 +65,7 @@ export class ContactPage {
       // Callbacks to fire to populate today contacts
       this.filterContactsByUser(contacts, this.todaycontacts);
     });
-
+    
     this.db.list('contacts', {
       query: {
         orderByChild: 'daytime',
