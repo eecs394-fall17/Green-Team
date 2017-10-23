@@ -212,10 +212,38 @@ export class ContactPage {
   }
 
   toggleContactHolder(key) {
-    if (this.openedContact == undefined) {
-      this.openedContact = key;
-    } else {
+    if (this.openedContact == key) {
       this.openedContact = undefined;
+    } else {
+      this.openedContact = key;
     }
+  }
+
+  checkoffContact(contactId, time, rep) {
+    let actionSheet = this.actionSheetCtrl.create({
+      title: 'What to do with contact plan?',
+      buttons: [
+        {
+          text: 'Complete',
+          handler: () => {    
+            this.removeContact(contactId);
+          }
+        },
+        {
+          text: 'Complete and Repeat (' + rep + ")",
+          handler: () => {
+            this.repeatContact(contactId, time, rep);
+          }
+        },
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            console.log('Cancel clicked');
+          }
+        }
+      ]
+    });
+    actionSheet.present();
   }
 }
