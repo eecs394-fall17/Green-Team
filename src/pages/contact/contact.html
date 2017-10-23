@@ -10,7 +10,7 @@
       <button ion-button icon-only (click)="choosePlan()">
         <ion-icon name="add"></ion-icon>
       </button>
-    </ion-buttons>
+    </ion-buttons> 
   </ion-navbar>
 </ion-header>
 
@@ -103,7 +103,7 @@
     </div>
   </div>
   <div *ngIf="todaycontacts.length == 0 && latercontacts.length == 0">
-    <p>No Contacts</p>
+    <ion-item>No Contacts</ion-item>
     <button ion-button block (click)="choosePlan()">Add A Contact</button>
   </div>
 </ion-content>

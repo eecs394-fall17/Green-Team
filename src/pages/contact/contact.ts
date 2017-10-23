@@ -12,7 +12,7 @@ import { AlertController } from 'ionic-angular';
 import { ActionSheetController } from 'ionic-angular';
 
 
-
+ 
 
 import * as moment from 'moment';
  
@@ -24,6 +24,13 @@ import * as moment from 'moment';
 export class ContactPage {
   // Firebase list of all contacts
   contacts: FirebaseListObservable<any>;
+  // Name contact sorted
+  sortname = false;
+  sortlabel = "Time";
+  namecontacts: any;
+
+  //get the closest contact to call
+  nextcontact: any;
   // Firebase list of contacts for current day 
   todaycontacts: any; //: FirebaseListObservable<any>;
   // Firebase list of contacts for future days
@@ -38,8 +45,10 @@ export class ContactPage {
   // Queries Firebase for contact lists above
   ngOnInit() {
     this.todaycontacts = [];
+    this.namecontacts = []; 
     this.latercontacts = [];
     this.laterchunks = [];
+    this.nextcontact = []; //next call
 
     var dayBegin = new Date();
     dayBegin.setHours(0,0,0,0);
@@ -56,7 +65,7 @@ export class ContactPage {
       // Callbacks to fire to populate today contacts
       this.filterContactsByUser(contacts, this.todaycontacts);
     });
-
+    
     this.db.list('contacts', {
       query: {
         orderByChild: 'daytime',
@@ -66,6 +75,25 @@ export class ContactPage {
       // Callbacks to fire to populate later contacts + chunks
       this.filterContactsByUser(contacts, this.latercontacts);
       this.chunkContacts(this.latercontacts, this.laterchunks);
+    });
+
+    this.db.list('contacts',{
+      query: {
+        orderByChild: 'name', 
+      }
+    }).subscribe(contacts => {
+      this.filterContactsByUser(contacts, this.namecontacts);
+    });
+
+    this.db.list('contacts', {
+      query: {
+        orderByChild: 'daytime',
+        startAt: dayBegin.toISOString(),
+        endAt: dayEnd.toISOString()
+      }
+    }).subscribe(contacts => {
+      // Callbacks to fire to populate today contacts
+      this.filterContactsByUser(contacts, this.nextcontact);
     });
   }
 
@@ -153,10 +181,6 @@ export class ContactPage {
     actionSheet.present();
   }
 
-  callThem(number){ 
-    console.log(number);
-  }
-
   showOptions(contactId, contactInfo) {
     console.log("showOptions called");
     let actionSheet = this.actionSheetCtrl.create({
@@ -207,6 +231,7 @@ export class ContactPage {
     });
   }
 
+  //removes contact from the database
   removeContact(contactId: string){
     this.contacts.remove(contactId);
   }
@@ -218,13 +243,13 @@ export class ContactPage {
       this.openedContact = key;
     }
   }
-
+  // pulls up action sheet and gives users options
   checkoffContact(contactId, time, rep) {
     let actionSheet = this.actionSheetCtrl.create({
       title: 'What to do with contact plan?',
       buttons: [
         {
-          text: 'Complete',
+          text: 'Complete adn Delete',
           handler: () => {    
             this.removeContact(contactId);
           }
