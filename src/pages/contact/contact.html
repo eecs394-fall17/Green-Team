@@ -27,8 +27,8 @@
           <div class="darkgrey" *ngIf="contact.description">
             {{contact.description}}
           </div>
-
-          <div>{{contact.daytime | date:'shortTime'}}, {{contact.repeat}}</div>
+          <!--div padding-left>Keep in Touch @</div-->
+          <div class="cursive">{{contact.daytime | date:'shortTime'}}, {{contact.repeat}}</div>
 
           <button ion-button icon-only item-end small (click)="repeatContact(contact.$key, contact.daytime, contact.repeat)">
             <ion-icon name="md-checkmark"></ion-icon>
@@ -39,16 +39,15 @@
           </button>
         </ion-item>
 
-        <div *ngIf="openedContact == contact.$key">
+        <div *ngIf="openedContact == contact.$key" padding-left>
           <a *ngIf="contact.phoneNumbers" href="tel:{{contact.phoneNumbers[0].value}}" (click)="callThem(contact.phoneNumbers[0].value)">
-            <button ion-button icon-only item-start outline small color="secondary">
-              <ion-icon name="call"> </ion-icon>
+            <button ion-button round icon-only item-start outline small color="secondary">
+              <ion-icon name="call"></ion-icon>
             </button>
           </a>
-          
           <a *ngIf="contact.phoneNumbers" [attr.href]="'sms:'+contact.phoneNumbers[0].value | safeUrl" (click)="callThem(contact.phoneNumbers[0].value)">
-            <button ion-button icon-only item-start outline small color="secondary">
-              <ion-icon name="text"> </ion-icon>
+            <button ion-button round icon-only item-end outline small color="secondary">
+              <ion-icon name="text"></ion-icon>
             </button>
           </a>
 
@@ -78,7 +77,7 @@
               {{contact.description}}
             </div>
 
-            <div>{{contact.daytime | timeOfDay:['day']}}, {{contact.repeat}}</div>
+            <div>{{contact.daytime | date:'shortTime'}}, {{contact.repeat}}</div>
 
             <button ion-button icon-only item-end small (click)="repeatContact(contact.$key, contact.daytime, contact.repeat)">
               <ion-icon name="md-checkmark"></ion-icon>
@@ -91,13 +90,13 @@
 
           <div *ngIf="openedContact == contact.$key">
             <a *ngIf="contact.phoneNumbers" href="tel:{{contact.phoneNumbers[0].value}}" (click)="callThem(contact.phoneNumbers[0].value)">
-              <button ion-button icon-only item-start outline small color="secondary">
+              <button ion-button round icon-only item-start outline small color="secondary">
                 <ion-icon name="call"> </ion-icon>
               </button>
             </a>
             
             <a *ngIf="contact.phoneNumbers" [attr.href]="'sms:'+contact.phoneNumbers[0].value | safeUrl" (click)="callThem(contact.phoneNumbers[0].value)">
-              <button ion-button icon-only item-start outline small color="secondary">
+              <button ion-button round icon-only item-start outline small color="secondary">
                 <ion-icon name="text"> </ion-icon>
               </button>
             </a>
@@ -123,7 +122,7 @@
               {{contact.description}}
             </div>
             
-            <div>{{contact.daytime | date:'shortTime'}}, {{contact.repeat}}</div>
+            <div class="cursive">{{contact.daytime | date:'shortTime'}}, {{contact.repeat}}</div>
   
             <button ion-button icon-only item-end small (click)="repeatContact(contact.$key, contact.daytime, contact.repeat)">
               <ion-icon name="md-checkmark"></ion-icon>
@@ -134,15 +133,15 @@
             </button>
           </ion-item>
   
-          <div *ngIf="openedContact == contact.$key">
+          <div *ngIf="openedContact == contact.$key" padding-left>
             <a *ngIf="contact.phoneNumbers" href="tel:{{contact.phoneNumbers[0].value}}" (click)="callThem(contact.phoneNumbers[0].value)">
-              <button ion-button icon-only item-start outline small color="secondary">
+              <button ion-button round icon-only item-start outline small color="secondary">
                 <ion-icon name="call"> </ion-icon>
               </button>
             </a>
             
             <a *ngIf="contact.phoneNumbers" [attr.href]="'sms:'+contact.phoneNumbers[0].value | safeUrl" (click)="callThem(contact.phoneNumbers[0].value)">
-              <button ion-button icon-only item-start outline small color="secondary">
+              <button ion-button round icon-only item-start outline small color="secondary">
                 <ion-icon name="text"> </ion-icon>
               </button>
             </a>
@@ -162,9 +161,10 @@
 <ion-grid>
   <ion-row>
     <ion-col col-4>
+        {{nextcontact}}
     </ion-col>
     <ion-col col-2>
-      <ion-label>{{nextcontact}}
+      <ion-label>
           <div *ngIf="sortname == true" >Name</div>
           <div *ngIf="sortname == false" >Time</div>
           </ion-label>
