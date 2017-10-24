@@ -57,15 +57,14 @@ export class ContactplanPage {
     this.contact.username = this.user.username;
 
     this.plt.ready().then(() => {
-      console.log("-----------------in view did load-------------------");
-      console.log(this.localNotifications.hasPermission());
-      
       this.localNotifications.hasPermission().then(function (granted) {
         if (!granted) {
           console.log("Not granted");
           
           this.localNotifications.registerPermission();
         }
+      }).catch(function(err) {
+        console.log("Cordova not available");
       });
     });
   }

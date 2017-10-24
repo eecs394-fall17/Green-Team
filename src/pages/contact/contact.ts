@@ -116,15 +116,14 @@ export class ContactPage {
     this.openedContact = undefined;
 
     this.plt.ready().then(() => {
-      console.log("-----------------in view did load-------------------");
-      console.log(this.localNotifications.hasPermission());
-      
       this.localNotifications.hasPermission().then(function (granted) {
         if (!granted) {
           console.log("Not granted");
           
           this.localNotifications.registerPermission();
         }
+      }).catch(function(err) {
+        console.log("Cordova not available");
       });
     });
   } 
@@ -251,7 +250,9 @@ export class ContactPage {
   //removes contact from the database
   removeContact(contactId: string){
     this.contacts.remove(contactId);
-    this.localNotifications.cancelAll;
+    if (this.localNotifications != undefined) {
+      this.localNotifications.cancelAll;
+    }
   }
 
   toggleContactHolder(key) {
