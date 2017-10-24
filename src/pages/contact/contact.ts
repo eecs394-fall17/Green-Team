@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams, Platform } from 'ionic-angular';
 
 import { User } from '../../models/user.interface';
 import { ContactplanPage } from '../contactplan/contactplan';
@@ -104,6 +104,7 @@ export class ContactPage {
       public alertCtrl: AlertController,
       public actionSheetCtrl: ActionSheetController,
       public db: AngularFireDatabase,
+      private plt: Platform,
       private localNotifications: LocalNotifications) {
     
     // Grab logged-in user passed from previous page
@@ -113,6 +114,19 @@ export class ContactPage {
     this.contacts = db.list('/contacts');
     // Default to no open contact in accordion
     this.openedContact = undefined;
+
+    this.plt.ready().then(() => {
+      console.log("-----------------in view did load-------------------");
+      console.log(this.localNotifications.hasPermission());
+      
+      this.localNotifications.hasPermission().then(function (granted) {
+        if (!granted) {
+          console.log("Not granted");
+          
+          this.localNotifications.registerPermission();
+        }
+      });
+    });
   } 
   
   // Filter Firebase contact query list for the logged-in user 

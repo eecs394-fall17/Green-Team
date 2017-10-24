@@ -47,8 +47,17 @@ export class PhonecontactplanPage {
     this.contact.username = this.user.username;
 
     /********************************** */
-    this.plt.ready().then((readySource) => {
+    this.plt.ready().then(() => {
+      console.log("-----------------in view did load-------------------");
+      console.log(this.localNotifications.hasPermission());
       
+      this.localNotifications.hasPermission().then(function (granted) {
+        if (!granted) {
+          console.log("Not granted");
+          
+          this.localNotifications.registerPermission();
+        }
+      });
     });
     
      /********************************** */
