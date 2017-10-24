@@ -12,6 +12,8 @@ import { AlertController } from 'ionic-angular';
 import { ActionSheetController } from 'ionic-angular';
 
 
+import { LocalNotifications } from '@ionic-native/local-notifications';
+
  
 
 import * as moment from 'moment';
@@ -101,7 +103,8 @@ export class ContactPage {
       public navParams: NavParams,
       public alertCtrl: AlertController,
       public actionSheetCtrl: ActionSheetController,
-      public db: AngularFireDatabase) {
+      public db: AngularFireDatabase,
+      private localNotifications: LocalNotifications) {
     
     // Grab logged-in user passed from previous page
     this.user = navParams.get('user');
@@ -234,6 +237,7 @@ export class ContactPage {
   //removes contact from the database
   removeContact(contactId: string){
     this.contacts.remove(contactId);
+    this.localNotifications.cancelAll;
   }
 
   toggleContactHolder(key) {
@@ -249,7 +253,7 @@ export class ContactPage {
       title: 'What to do with contact plan?',
       buttons: [
         {
-          text: 'Complete adn Delete',
+          text: 'Complete and Delete',
           handler: () => {    
             this.removeContact(contactId);
           }
