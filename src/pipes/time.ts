@@ -9,13 +9,17 @@ export class TimeOfDay {
     var date = new Date(value);
     //console.log(date);
 
-    var time = (date.getUTCHours() % 12) + ":";
-    var minutes = date.getUTCMinutes();
+    var hours = (date.getHours() % 12);
+    if (hours == 0)
+      hours = 12;
+
+    var time = hours + ":";
+    var minutes = date.getMinutes();
     if (minutes < 10) {
       time += "0";
     }
     time += minutes;
-    time += (date.getUTCHours() > 12) ? " pm" : " am";
+    time += (date.getHours() > 12) ? " pm" : " am";
     
     if (args == undefined) {
       return time;
@@ -27,9 +31,9 @@ export class TimeOfDay {
     if (args[0] == 'day') {
       console.log(time);
        
-      return day_names[date.getUTCDay()] + ", " + time;
+      return day_names[date.getDay()] + ", " + time;
     } else if (args[0] == 'dayDate') {
-      return day_names[date.getUTCDay()] + ", " + month_names[date.getUTCMonth()] + " " + date.getUTCDate().toString();
+      return day_names[date.getDay()] + ", " + month_names[date.getMonth()] + " " + date.getDate().toString();
     }
     return time;
   }

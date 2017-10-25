@@ -9,13 +9,12 @@ import { LocalNotifications } from '@ionic-native/local-notifications';
 import { Contact } from '../../models/contact.interface';
 import { User } from '../../models/user.interface';
 //import { ContactPlan } from '../../models/contactplan.interface';
+import * as moment from 'moment';
 
 @Component({
   selector: 'page-contactplan',
   templateUrl: 'contactplan.html'
 })
-
-
 
 
 export class ContactplanPage {
@@ -52,7 +51,9 @@ export class ContactplanPage {
       this.contact.daytime = this.contactInfo.daytime;
     } else {
       this.contact.repeat = this.repeats[1];
-      this.contact.daytime = (new Date()).toISOString();
+      var defaultTime = moment();
+      defaultTime.set({second:0});
+      this.contact.daytime = defaultTime.format();
     }
     this.contact.username = this.user.username;
 
@@ -90,6 +91,8 @@ export class ContactplanPage {
   }
   */
   logForm() {
+    this.contact.daytime = (new Date(this.contact.daytime)).toISOString();
+
     // Pushing new contact to query list adds it to the database
     if (this.contactKey == undefined) {
       this.contacts.push(this.contact);

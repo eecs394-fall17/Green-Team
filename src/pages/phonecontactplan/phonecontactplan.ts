@@ -10,10 +10,14 @@ import { Contact } from '../../models/contact.interface';
 import { User } from '../../models/user.interface';
 //import { ContactPlan } from '../../models/contactplan.interface';
 
+import * as moment from 'moment';
+
 @Component({
   selector: 'page-phonecontactplan',
   templateUrl: 'phonecontactplan.html',
 })
+
+
 export class PhonecontactplanPage {
   user = {} as User;
 
@@ -40,8 +44,11 @@ export class PhonecontactplanPage {
     this.contact.phoneNumbers = this.phoneContact.phoneNumbers; //this is an array
     this.contact.description = " ";
     this.contact.repeat = this.repeats[1]; //making it automatically be weekly
-    this.contact.daytime = (new Date()).toISOString();
-    
+
+    var defaultTime = moment();
+    defaultTime.set({second:0});
+    this.contact.daytime = defaultTime.format();
+
     this.user = navParams.get('user');
     console.log(this.user);
     this.contact.username = this.user.username;
@@ -73,6 +80,7 @@ export class PhonecontactplanPage {
   }
 
   logForm() {
+    this.contact.daytime = (new Date(this.contact.daytime)).toISOString();
     console.log(this.contact);
   
     //pushing the newly created contact from the form to the db
