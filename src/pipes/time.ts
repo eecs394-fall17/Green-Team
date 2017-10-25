@@ -19,8 +19,8 @@ export class TimeOfDay {
       time += "0";
     }
     time += minutes;
-    time += (date.getHours() > 12) ? " pm" : " am";
-    
+    time += (date.getHours() > 11) ? " pm" : " am";
+    //durell did this ^^^
     if (args == undefined) {
       return time;
     }
