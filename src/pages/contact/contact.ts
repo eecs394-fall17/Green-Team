@@ -290,4 +290,13 @@ export class ContactPage {
     });
     actionSheet.present();
   }
+
+  toggleSort(sortByName) {
+    if (this.sortname) {
+      this.sortlabel = "A-Z";
+    } else {
+      this.sortlabel = "Time";
+    }
+  }
+  
 }
