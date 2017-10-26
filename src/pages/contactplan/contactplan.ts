@@ -48,7 +48,7 @@ export class ContactplanPage {
       this.contact.name = this.contactInfo.name;
       this.contact.description = this.contactInfo.description;
       this.contact.repeat = this.contactInfo.repeat;
-      this.contact.daytime = this.contactInfo.daytime;
+      this.contact.daytime = moment(this.contactInfo.daytime).format();
     } else {
       this.contact.repeat = this.repeats[1];
       var defaultTime = moment();
